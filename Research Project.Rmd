@@ -5,8 +5,26 @@ date: "2023-11-08"
 ---
 ```{r}
 
-
-
+library(ggplot2)
+library(dplyr)
+library(visreg)
+library(tidyverse)
+library(readr)
+library(lubridate)
 
 ```
 
+```{r}
+AC_Data_2022 <- read.csv("~/MazerResearchProject/Data/AC_Data_2022.csv")
+view(AC_Data_2022)
+```
+
+```{r}
+names(AC_Data_2022)
+#Remember to log Stem Biomass#
+
+min(AC_Data_2022$Stem_Biomass, na.rm = TRUE) #Dont need to add 1 wooooo#
+```
+```{r}
+
+```
