@@ -24,7 +24,42 @@ names(AC_Data_2022)
 #Remember to log Stem Biomass#
 
 min(AC_Data_2022$Stem_Biomass, na.rm = TRUE) #Dont need to add 1 wooooo#
+#min = 1.35#
 ```
 ```{r}
+#Separate transects#
 
+ACTransect1 <- subset(AC_Data_2022, Transect == 1)
+ACTransect2 <- subset(AC_Data_2022, Transect == 2)
+ACTransect3 <- subset(AC_Data_2022, Transect == 3)
+ACTransect4 <- subset(AC_Data_2022, Transect == 4)
+ACTransect5 <- subset(AC_Data_2022, Transect == 5)
+ACTransect6 <- subset(AC_Data_2022, Transect == 6)
+ACTransect7 <- subset(AC_Data_2022, Transect == 7)
+ACTransect8 <- subset(AC_Data_2022, Transect == 8)
+ACTransect9 <- subset(AC_Data_2022, Transect == 9)
+
+```
+
+```{r}
+#Calculate mean phenotype of maternal genotype separated by transect to account for environmental effects on each transect#
+Recipient1 <- c(ACTransect1$Recipient)
+Variable1 <- c("Recipient","Stem_Biomass")
+ACTransect1Pop <- rbind(ACTransect1, na.rm = TRUE)
+ACTransect1Pop <- ACTransect1Pop[Variable1]
+
+MaternalMean1 <- mean(ACTransect1Pop$Stem_Biomass, na.rm = TRUE)
+
+
+```
+
+
+```{r}
+Recipients <- c(ACTransect1$Recipient, ACTransect2$Recipient, ACTransect3$Recipient, ACTransect4$Recipient, ACTransect5$Recipient, ACTransect6$Recipient, ACTransect7$Recipient, ACTransect8$Recipient, ACTransect9$Recipient)
+
+Variable <- c("Recipient", "Stem_Biomass")
+
+Maternal <- rbind(ACTransect1,ACTransect2,ACTransect3,ACTransect4,ACTransect5,ACTransect6,ACTransect7,ACTransect8, ACTransect9)
+Maternal <- Maternal[Variable]
+Maternal <- Maternal[order(Maternal$Recipient, decreasing = TRUE),]
 ```
