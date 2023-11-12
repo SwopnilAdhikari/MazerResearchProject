@@ -47,10 +47,11 @@ Recipient1 <- c(ACTransect1$Recipient)
 Variable1 <- c("Recipient","Stem_Biomass")
 ACTransect1Pop <- rbind(ACTransect1, na.rm = TRUE)
 ACTransect1Pop <- ACTransect1Pop[Variable1]
+ACTransect1Pop <- na.omit(ACTransect1Pop)
 
 MaternalMean1 <- mean(ACTransect1Pop$Stem_Biomass, na.rm = TRUE)
-
-
+#Calculate genetic variance of maternal genotype of Transect 1
+var(ACTransect1Pop$Stem_Biomass, na.rm = FALSE)
 ```
 
 
@@ -62,4 +63,17 @@ Variable <- c("Recipient", "Stem_Biomass")
 Maternal <- rbind(ACTransect1,ACTransect2,ACTransect3,ACTransect4,ACTransect5,ACTransect6,ACTransect7,ACTransect8, ACTransect9)
 Maternal <- Maternal[Variable]
 Maternal <- Maternal[order(Maternal$Recipient, decreasing = TRUE),]
+```
+
+```{r}
+#Calculate paternal genotype mean
+Donor1 <- c(ACTransect1$Donor)
+DonorVariable1 <- c("Donor","Stem_Biomass")
+ACTransect1PopDonor <- rbind(ACTransect1, na.rm = TRUE)
+ACTransect1PopDonor <- ACTransect1PopDonor[DonorVariable1]
+ACTransect1PopDonor <- na.omit(ACTransect1PopDonor)
+
+DonorMean <- ACTransect1PopDonor %>%
+  group_by(Donor) %>%
+  summarize(mean_X = mean(Stem_Biomass))
 ```
