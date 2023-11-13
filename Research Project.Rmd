@@ -75,5 +75,6 @@ ACTransect1PopDonor <- na.omit(ACTransect1PopDonor)
 
 DonorMean <- ACTransect1PopDonor %>%
   group_by(Donor) %>%
-  summarize(mean_X = mean(Stem_Biomass))
+  summarize(Stem_Biomass = mean(Stem_Biomass))
+var(DonorMean$Stem_Biomass, na.rm=TRUE)
 ```
