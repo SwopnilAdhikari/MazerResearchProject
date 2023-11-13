@@ -42,6 +42,54 @@ ACTransect9 <- subset(AC_Data_2022, Transect == 9)
 ```
 
 ```{r}
+PopulationV1 <- ACTransect1$Population 
+Field_YearV1 <- ACTransect1$Field_Year
+GenerationV1 <- ACTransect1$Generation
+BlockV1 <- ACTransect1$Block
+TransectV1 <- ACTransect1$Transect
+SequenceV1 <- ACTransect1$Sequence
+DonorV1 <- ACTransect1$Donor
+RecipientV1 <- ACTransect1$Recipient
+FFDV1 <- ACTransect1$FFD
+LFDV1 <- ACTransect1$LFD
+
+
+ACTransect1$Population <-NULL
+ACTransect1$Field_Year <- NULL
+ACTransect1$Generation <- NULL
+ACTransect1$Block <- NULL
+ACTransect1$Transect <- NULL
+ACTransect1$Sequence <- NULL
+ACTransect1$Donor <- NULL
+ACTransect1$Recipient <- NULL
+ACTransect1$FFD <- NULL
+ACTransect1$LFD <- NULL
+
+z_scores <- as.data.frame(sapply(ACTransect1, function(ACTransect1) (abs(ACTransect1-mean(ACTransect1, na.rm = TRUE))/sd(ACTransect1, na.rm = TRUE))))
+
+class(z_scores)
+
+View(z_scores) 
+
+for(i in 1:nrow(z_scores)){
+  for(j in 1:ncol(z_scores)){
+    if(is.na(z_scores[i,j])){
+      ACTransect1[i,j] = NA
+    }
+      else if(z_scores[i,j] > 3){
+      ACTransect1[i,j] = NA
+      }
+    }
+  }
+
+ACTransect1 <- ACTransect1 %>% 
+  mutate(Population = PopulationV1 , Field_Year = Field_YearV1, Generation = GenerationV1, Block = BlockV1, Transect = TransectV1, Sequence = SequenceV1, Donor = DonorV1, Recipient = RecipientV1, FFD = FFDV1, LFD = LFDV1, .before = Left_Or_Right, )
+
+View(ACTransect1)
+```
+
+
+```{r}
 #Calculate mean phenotype of maternal genotype separated by transect to account for environmental effects on each transect#
 Recipient1 <- c(ACTransect1$Recipient)
 Variable1 <- c("Recipient","Stem_Biomass")
@@ -50,7 +98,7 @@ ACTransect1Pop <- ACTransect1Pop[Variable1]
 ACTransect1Pop <- na.omit(ACTransect1Pop)
 
 MaternalMean1 <- mean(ACTransect1Pop$Stem_Biomass, na.rm = TRUE)
-#Calculate genetic variance of maternal genotype of Transect 1
+#Calculate genetic variance of maternal genotype in Transect 1
 var(ACTransect1Pop$Stem_Biomass, na.rm = FALSE)
 ```
 
@@ -76,5 +124,6 @@ ACTransect1PopDonor[is.na(ACTransect1PopDonor)] <- 0
 DonorMean <- ACTransect1PopDonor %>%
   group_by(Donor) %>%
   summarize(Stem_Biomass = mean(Stem_Biomass))
+#calculate genetic variance of stem biomass in paternal genotypes in Transect 1
 var(DonorMean$Stem_Biomass, na.rm=TRUE)
 ```
