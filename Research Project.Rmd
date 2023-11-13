@@ -25,6 +25,8 @@ names(AC_Data_2022)
 
 min(AC_Data_2022$Stem_Biomass, na.rm = TRUE) #Dont need to add 1 wooooo#
 #min = 1.35#
+
+AC_Data_2022 <- AC_Data_2022 %>% mutate (Log_Stem_Biomass = log(Stem_Biomass))
 ```
 ```{r}
 #Separate transects#
@@ -39,9 +41,18 @@ ACTransect7 <- subset(AC_Data_2022, Transect == 7)
 ACTransect8 <- subset(AC_Data_2022, Transect == 8)
 ACTransect9 <- subset(AC_Data_2022, Transect == 9)
 
+# Creating mean-centering function
+
+center_scale <- function(x) {
+  scale(x, scale = FALSE)
+}
+
+
+
 ```
 
 ```{r}
+#Remove outliers for Transect 1#
 PopulationV1 <- ACTransect1$Population 
 Field_YearV1 <- ACTransect1$Field_Year
 GenerationV1 <- ACTransect1$Generation
@@ -100,6 +111,9 @@ ACTransect1Pop <- na.omit(ACTransect1Pop)
 MaternalMean1 <- mean(ACTransect1Pop$Stem_Biomass, na.rm = TRUE)
 #Calculate genetic variance of maternal genotype in Transect 1
 var(ACTransect1Pop$Stem_Biomass, na.rm = FALSE)
+mean(ACTransect1Pop$Stem_Biomass, na.rm = FALSE)
+min(ACTransect1Pop$Stem_Biomass, na.rm = FALSE)
+max(ACTransect1Pop$Stem_Biomass, na.rm = FALSE)
 ```
 
 
@@ -127,3 +141,14 @@ DonorMean <- ACTransect1PopDonor %>%
 #calculate genetic variance of stem biomass in paternal genotypes in Transect 1
 var(DonorMean$Stem_Biomass, na.rm=TRUE)
 ```
+
+#Start on line 697 to begin mean centering stuff#
+```{r}
+ACTransect1 <- ACTransect1 %>% mutate(Log_Stem_BiomassMC = center_scale(Log_Stem_Biomass))
+mean(ACTransect1$Log_Stem_BiomassMC, na.rm = TRUE)
+min(ACTransect1$Log_Stem_BiomassMC, na.rm = TRUE)
+max(ACTransect1$Log_Stem_BiomassMC, na.rm = TRUE)
+
+```
+#Look into mixed models. a <- lmer(StemBiomass ~ matid + patid) . thats the code you should be using to look at regression. Then to get variance of maternal id and paternal id in relation to stem biomass youll use the code : varcomp(a)#
+
