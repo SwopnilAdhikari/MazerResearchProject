@@ -71,7 +71,7 @@ Donor1 <- c(ACTransect1$Donor)
 DonorVariable1 <- c("Donor","Stem_Biomass")
 ACTransect1PopDonor <- rbind(ACTransect1, na.rm = TRUE)
 ACTransect1PopDonor <- ACTransect1PopDonor[DonorVariable1]
-ACTransect1PopDonor <- na.omit(ACTransect1PopDonor)
+ACTransect1PopDonor[is.na(ACTransect1PopDonor)] <- 0
 
 DonorMean <- ACTransect1PopDonor %>%
   group_by(Donor) %>%
