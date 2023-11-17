@@ -182,3 +182,9 @@ knitr::knit("~/MazerResearchProject/DataFromOtherCode.Rmd", output = NULL)
 var(AC_Avg_MC_Population$AMC_Log_Stem_Biomass, na.rm = TRUE)
 var(AC_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
 ```
+```{r}
+#Access HR code with Knitr package#
+knitr::knit("~/MazerResearchProject/DataFromOtherCodeHR.Rmd", output = NULL)
+var(HR_Avg_MC_Population$AMC_Log_Stem_Biomass, na.rm = TRUE)
+var(HR_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
+```
