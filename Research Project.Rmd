@@ -11,7 +11,7 @@ library(visreg)
 library(tidyverse)
 library(readr)
 library(lubridate)
-
+library(knitr)
 ```
 
 ```{r}
@@ -149,6 +149,36 @@ mean(ACTransect1$Log_Stem_BiomassMC, na.rm = TRUE)
 min(ACTransect1$Log_Stem_BiomassMC, na.rm = TRUE)
 max(ACTransect1$Log_Stem_BiomassMC, na.rm = TRUE)
 
+Recipient1Log <- c(ACTransect1$Recipient)
+Variable1Log <- c("Recipient","Log_Stem_BiomassMC")
+ACTransect1PopLog <- rbind(ACTransect1, na.rm = TRUE)
+ACTransect1PopLog <- ACTransect1PopLog[Variable1Log]
+ACTransect1PopLog <- na.omit(ACTransect1PopLog)
+
+MaternalMean1Log <- mean(ACTransect1Pop$Log_Stem_BiomassMC, na.rm = TRUE)
+#Calculate genetic variance of maternal genotype in Transect 1
+var(ACTransect1PopLog$Log_Stem_BiomassMC, na.rm = TRUE)
+
+Donor1Log <- c(ACTransect1$Donor)
+DonorVariable1Log <- c("Donor","Log_Stem_BiomassMC")
+ACTransect1PopDonorLog <- rbind(ACTransect1, na.rm = TRUE)
+ACTransect1PopDonorLog <- ACTransect1PopDonorLog[DonorVariable1Log]
+
+DonorMeanLog <- ACTransect1PopDonorLog %>%
+  group_by(Donor) %>%
+  summarize(Log_Stem_BiomassMC = mean(Log_Stem_BiomassMC))
+#calculate genetic variance of stem biomass in paternal genotypes in Transect 1
+var(DonorMeanLog$Log_Stem_BiomassMC, na.rm=TRUE)
 ```
 #Look into mixed models. a <- lmer(StemBiomass ~ matid + patid) . thats the code you should be using to look at regression. Then to get variance of maternal id and paternal id in relation to stem biomass youll use the code : varcomp(a)#
 
+```{r}
+list.files()
+file.exists("DataFromOtherCode.Rmd")
+source("~/MazerResearchProject/DataFromOtherCode.Rmd")
+file.exists("DataFromOtherCode.Rmd")
+knitr::knit("~/MazerResearchProject/DataFromOtherCode.Rmd", output = NULL)
+
+var(AC_Avg_MC_Population$AMC_Log_Stem_Biomass, na.rm = TRUE)
+var(AC_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
+```
