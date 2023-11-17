@@ -15,31 +15,31 @@ library(knitr)
 ```
 
 ```{r}
-AC_Data_2022 <- read.csv("~/MazerResearchProject/Data/AC_Data_2022.csv")
-view(AC_Data_2022)
+#AC_Data_2022 <- read.csv("~/MazerResearchProject/Data/AC_Data_2022.csv")
+#view(AC_Data_2022)
 ```
 
 ```{r}
-names(AC_Data_2022)
+#names(AC_Data_2022)
 #Remember to log Stem Biomass#
 
-min(AC_Data_2022$Stem_Biomass, na.rm = TRUE) #Dont need to add 1 wooooo#
+#min(AC_Data_2022$Stem_Biomass, na.rm = TRUE) #Dont need to add 1 wooooo#
 #min = 1.35#
 
-AC_Data_2022 <- AC_Data_2022 %>% mutate (Log_Stem_Biomass = log(Stem_Biomass))
+#AC_Data_2022 <- AC_Data_2022 %>% mutate (Log_Stem_Biomass = log(Stem_Biomass))
 ```
 ```{r}
 #Separate transects#
 
-ACTransect1 <- subset(AC_Data_2022, Transect == 1)
-ACTransect2 <- subset(AC_Data_2022, Transect == 2)
-ACTransect3 <- subset(AC_Data_2022, Transect == 3)
-ACTransect4 <- subset(AC_Data_2022, Transect == 4)
-ACTransect5 <- subset(AC_Data_2022, Transect == 5)
-ACTransect6 <- subset(AC_Data_2022, Transect == 6)
-ACTransect7 <- subset(AC_Data_2022, Transect == 7)
-ACTransect8 <- subset(AC_Data_2022, Transect == 8)
-ACTransect9 <- subset(AC_Data_2022, Transect == 9)
+#ACTransect1 <- subset(AC_Data_2022, Transect == 1)
+#ACTransect2 <- subset(AC_Data_2022, Transect == 2)
+#ACTransect3 <- subset(AC_Data_2022, Transect == 3)
+#ACTransect4 <- subset(AC_Data_2022, Transect == 4)
+#ACTransect5 <- subset(AC_Data_2022, Transect == 5)
+#ACTransect6 <- subset(AC_Data_2022, Transect == 6)
+#ACTransect7 <- subset(AC_Data_2022, Transect == 7)
+#ACTransect8 <- subset(AC_Data_2022, Transect == 8)
+#ACTransect9 <- subset(AC_Data_2022, Transect == 9)
 
 # Creating mean-centering function
 
