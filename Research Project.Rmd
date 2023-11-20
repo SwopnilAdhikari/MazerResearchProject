@@ -173,26 +173,23 @@ var(DonorMeanLog$Log_Stem_BiomassMC, na.rm=TRUE)
 #Look into mixed models. a <- lmer(StemBiomass ~ matid + patid) . thats the code you should be using to look at regression. Then to get variance of maternal id and paternal id in relation to stem biomass youll use the code : varcomp(a)#
 
 ```{r}
-list.files()
-file.exists("DataFromOtherCode.Rmd")
-source("~/MazerResearchProject/DataFromOtherCode.Rmd")
-file.exists("DataFromOtherCode.Rmd")
+
 knitr::knit("~/MazerResearchProject/DataFromOtherCode.Rmd", output = NULL)
 
-var(AC_Avg_MC_Population$AMC_Log_Stem_Biomass, na.rm = TRUE)
+var(AC_Avg_MC_Population_ByRecip$AMC_Log_Stem_Biomass, na.rm = TRUE)
 var(AC_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
 ```
 ```{r}
 #Access HR code with Knitr package#
 knitr::knit("~/MazerResearchProject/DataFromOtherCodeHR.Rmd", output = NULL)
-var(HR_Avg_MC_Population$AMC_Log_Stem_Biomass, na.rm = TRUE)
+var(HR_Avg_MC_Population_ByRecip$AMC_Log_Stem_Biomass, na.rm = TRUE)
 var(HR_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
 ```
 
 ```{r}
 #Access BO code with Knitr package
 knitr::knit("~/MazerResearchProject/DataFromOtherCodeBO.Rmd", output = NULL)
-var(BO_Avg_MC_Population$AMC_Log_Stem_Biomass, na.rm = TRUE)
+var(BO_Avg_MC_Population_ByRecip$AMC_Log_Stem_Biomass, na.rm = TRUE)
 var(BO_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
 
 ```

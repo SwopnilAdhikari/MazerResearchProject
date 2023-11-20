@@ -5,22 +5,26 @@ date: "2023-11-17"
 ---
 
 ```r
-library(ggplot2)
+library(Matrix)
 library(dplyr)
-library(visreg)
-library(tidyverse)
-library(readr)
+library(ggplot2)
+library(jtools)
+library(lme4)
+library(lmerTest)
 library(lubridate)
+library(readr)
+library(tidyverse)
+library(visreg)
 
 HR_Data_2022 <- read_csv("~/MazerResearchProject/Data/HR_Data_2022.csv")
 ```
 
 ```
 ## Rows: 406 Columns: 23
-## ── Column specification ────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────
 ## Delimiter: ","
 ## chr  (6): Population, Generation, Donor, Recipient, FFD, LFD
-## dbl (16): Field_Year, Block, Transect, Sequence, Plant_ID, Total_Closed_Fruits, Total_Fruits...
+## dbl (16): Field_Year, Block, Transect, Sequence, Plant_ID, Total_Closed_Fruits, Total_Fruits, Tot_Seed_Num(Clo...
 ## lgl  (1): Left_Or_Right
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
@@ -35,16 +39,14 @@ HR_Data_2022$Flowering_Duration - HR_Data_2022$fl_duration
 ```
 
 ```
-##   [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-##  [46] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-##  [91] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [136] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [181] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [226] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [271] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [316] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [361] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [406] 0
+##   [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+##  [55] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## [109] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## [163] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## [217] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## [271] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## [325] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## [379] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 ```
 
 ```r
@@ -119,6 +121,10 @@ RecipientV1 <- HRTransect1$Recipient
 FFDV1 <- HRTransect1$FFD
 LFDV1 <- HRTransect1$LFD
 
+# All of these vectors include all of the values in the original data set (HR_Data_2022)
+
+# Remove values of these variables in HRTransect1 (the data frame that contains the variables for which we need to get rid of the outliers)
+
 HRTransect1$Population <-NULL
 HRTransect1$Field_Year <- NULL
 HRTransect1$Generation <- NULL
@@ -130,9 +136,14 @@ HRTransect1$Recipient <- NULL
 HRTransect1$FFD <- NULL
 HRTransect1$LFD <- NULL
 
+
+# z-scores are calculated and the for loop goes through eHRh element of the z-score array (eHRh row and column), looking for values above 3, which implies that the value is an outlier.
+
+# The index (row i, column j) will be removed from the original HRTransect1 data frame.
+
 z_scores <- as.data.frame(sapply(HRTransect1, function(HRTransect1) (abs(HRTransect1-mean(HRTransect1, na.rm = TRUE))/sd(HRTransect1, na.rm = TRUE))))
 
-class(z_scores)
+class(z_scores) # Shows that z_scores is a data_frame
 ```
 
 ```
@@ -140,7 +151,10 @@ class(z_scores)
 ```
 
 ```r
-View(z_scores)
+View(z_scores) # EHRh value is a z_score
+
+# The for loop is as follows.  For eHRh index (row=i, column=j) in the z_score data frame that is > 3, it replHRes the value for that index in Transect1 with an "NA"
+
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
@@ -154,7 +168,15 @@ for(i in 1:nrow(z_scores)){
 
 HRTransect1 <- HRTransect1 %>% mutate(Population = PopulationV1 , Field_Year = Field_YearV1, Generation = GenerationV1, Block = BlockV1, Transect = TransectV1, Sequence = SequenceV1, Donor = DonorV1, Recipient = RecipientV1, FFD = FFDV1, LFD = LFDV1, .before = Left_Or_Right, )
 
-View(HRTransect1)
+print(HRTransect1$Sequence)
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 28 29 30 31 32 33 34 35 36 37 38
+## [37] 39 40 41 42 43 44 45 46
+```
+
+```r
 ################################################################################################
 PopulationV2 <- HRTransect2$Population # Creates a vector of Population as charHRter variables
 Field_YearV2 <- HRTransect2$Field_Year
@@ -167,6 +189,8 @@ RecipientV2 <- HRTransect2$Recipient
 FFDV2 <- HRTransect2$FFD
 LFDV2 <- HRTransect2$LFD
 
+
+# Remove values of these variables in HRTransect2 (the data frame that contains the variables for which we want to get rid of the outliers)
 HRTransect2$Population <-NULL
 HRTransect2$Field_Year <- NULL
 HRTransect2$Generation <- NULL
@@ -178,11 +202,13 @@ HRTransect2$Recipient <- NULL
 HRTransect2$FFD <- NULL
 HRTransect2$LFD <- NULL
 
+
+# z-scores are calculated and the for loop goes through eHRh element of the z-score array, looking for values above 3 which implies the value is an outlier and removes that index from the original HRTransect2 data frame
 z_scores <- as.data.frame(sapply(HRTransect2, function(HRTransect2) (abs(HRTransect2-mean(HRTransect2, na.rm = TRUE))/sd(HRTransect2, na.rm = TRUE))))
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      HRTransect1[i,j] = NA
+      HRTransect2[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       HRTransect2[i,j] = NA
@@ -194,7 +220,8 @@ HRTransect2 <- HRTransect2 %>% mutate(Population = PopulationV2 , Field_Year = F
 
 
 View(HRTransect2)
-##################################################################################################
+
+
 PopulationV3 <- HRTransect3$Population # Creates a vector of Population as charHRter variables
 Field_YearV3 <- HRTransect3$Field_Year
 GenerationV3 <- HRTransect3$Generation
@@ -226,7 +253,7 @@ z_scores <- as.data.frame(sapply(HRTransect3, function(HRTransect3) (abs(HRTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      HRTransect1[i,j] = NA
+      HRTransect3[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       HRTransect3[i,j] = NA
@@ -241,16 +268,14 @@ names(HRTransect3)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -284,7 +309,7 @@ z_scores <- as.data.frame(sapply(HRTransect4, function(HRTransect4) (abs(HRTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      HRTransect1[i,j] = NA
+      HRTransect4[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       HRTransect4[i,j] = NA
@@ -298,16 +323,14 @@ names(HRTransect4)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -341,7 +364,7 @@ z_scores <- as.data.frame(sapply(HRTransect5, function(HRTransect5) (abs(HRTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      HRTransect1[i,j] = NA
+      HRTransect5[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       HRTransect5[i,j] = NA
@@ -355,16 +378,14 @@ names(HRTransect5)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -398,7 +419,7 @@ z_scores <- as.data.frame(sapply(HRTransect6, function(HRTransect6) (abs(HRTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      HRTransect1[i,j] = NA
+      HRTransect6[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       HRTransect6[i,j] = NA
@@ -413,16 +434,14 @@ names(HRTransect6)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -455,7 +474,7 @@ z_scores <- as.data.frame(sapply(HRTransect7, function(HRTransect7) (abs(HRTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      HRTransect1[i,j] = NA
+      HRTransect7[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       HRTransect7[i,j] = NA
@@ -470,16 +489,14 @@ names(HRTransect7)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -514,7 +531,7 @@ z_scores <- as.data.frame(sapply(HRTransect8, function(HRTransect8) (abs(HRTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      HRTransect1[i,j] = NA
+      HRTransect8[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       HRTransect8[i,j] = NA
@@ -529,16 +546,14 @@ names(HRTransect8)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -573,7 +588,7 @@ z_scores <- as.data.frame(sapply(HRTransect9, function(HRTransect9) (abs(HRTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      HRTransect1[i,j] = NA
+      HRTransect9[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       HRTransect9[i,j] = NA
@@ -588,16 +603,14 @@ names(HRTransect9)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 
@@ -608,16 +621,14 @@ names(HRTransect1)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -632,58 +643,60 @@ HRTransect1 <- HRTransect1 %>% mutate(
   Log_Stem_Biomass_MC = center_scale(Log_Stem_Biomass),
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
+
+View(HRTransect1)
 
 # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
 
-mean(HRTransect1$Stem_Biomass, na.rm=TRUE)
+mean(HRTransect1$Total_Closed_Fruits, na.rm=TRUE)
 ```
 
 ```
-## [1] 43.62607
-```
-
-```r
-min(HRTransect1$Stem_Biomass, na.rm=TRUE)
-```
-
-```
-## [1] 5.2
+## [1] 10.70455
 ```
 
 ```r
-max(HRTransect1$Stem_Biomass, na.rm=TRUE)
+min(HRTransect1$Total_Closed_Fruits, na.rm=TRUE)
 ```
 
 ```
-## [1] 123.09
-```
-
-```r
-mean(HRTransect1$Log_Stem_Biomass_MC, na.rm=TRUE)
-```
-
-```
-## [1] -1.776636e-16
+## [1] 0
 ```
 
 ```r
-min(HRTransect1$Log_Stem_Biomass_MC, na.rm=TRUE)
+max(HRTransect1$Total_Closed_Fruits, na.rm=TRUE)
 ```
 
 ```
-## [1] -2.056159
+## [1] 28
 ```
 
 ```r
-max(HRTransect1$Log_Stem_Biomass_MC, na.rm=TRUE)
+mean(HRTransect1$Total_Closed_Fruits_MC, na.rm=TRUE)
 ```
 
 ```
-## [1] 1.108098
+## [1] -3.230306e-16
+```
+
+```r
+min(HRTransect1$Total_Closed_Fruits_MC, na.rm=TRUE)
+```
+
+```
+## [1] -10.70455
+```
+
+```r
+max(HRTransect1$Total_Closed_Fruits_MC, na.rm=TRUE)
+```
+
+```
+## [1] 17.29545
 ```
 
 ```r
@@ -697,8 +710,8 @@ max(HRTransect1$Log_Stem_Biomass_MC, na.rm=TRUE)
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
  # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -761,8 +774,8 @@ max(HRTransect2$Total_Closed_Fruits_MC, na.rm=TRUE)
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
  
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -825,8 +838,8 @@ HRTransect4 <- HRTransect4 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -889,8 +902,8 @@ HRTransect5 <- HRTransect5 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -953,8 +966,8 @@ HRTransect6 <- HRTransect6 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -1017,8 +1030,8 @@ HRTransect7 <- HRTransect7 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -1081,8 +1094,8 @@ HRTransect8 <- HRTransect8 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -1145,8 +1158,8 @@ HRTransect9 <- HRTransect9 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
 View(HRTransect9)
@@ -1205,13 +1218,15 @@ max(HRTransect9$Total_Closed_Fruits_MC, na.rm=TRUE)
 ```r
 Recipients <- c(HRTransect1$Recipient, HRTransect2$Recipient, HRTransect3$Recipient, HRTransect4$Recipient, HRTransect5$Recipient, HRTransect6$Recipient, HRTransect7$Recipient, HRTransect8$Recipient, HRTransect9$Recipient)
 
-Recipients <- unique(Recipients) # Names of maternal ID's, without repetition (n=)
+# Now, modify this vector so that eHRh recipient occurs only once
+
+Recipients <- unique(Recipients) # Names of maternal ID's, without repetition (n=107)
 
 str(Recipients)
 ```
 
 ```
-##  chr [1:138] "HR_058" "HR_183" "HR_176" "HR_146" "HR_177" "HR_115" "HR_036" "HR_033" ...
+##  chr [1:137] "HR_058" "HR_183" "HR_176" "HR_146" "HR_177" "HR_115" "HR_036" "HR_033" "HR_061" "HR_158" ...
 ```
 
 ```r
@@ -1219,18 +1234,27 @@ length(Recipients)
 ```
 
 ```
-## [1] 138
+## [1] 137
 ```
 
 ```r
-Variables <- c("Population", "Field_Year", "Generation", "Block", "Transect", "Sequence", "Plant_ID", "Donor", "Recipient", "FFD", "LFD", "Total_Fruits", "Mean_Ind_Seed_Mass_mg", "Mean_Seeds_per_Fruit", "Lifetime_Fecundity", "Stem_Biomass", "Corolla_Diameter", "Corolla_Area", "Leaf_Area_mm2", "Flowering_Duration", "Log_Total_Fruits", "Log_Mean_Seeds_per_Fruit", "Log_Lifetime_Fecundity", "Log_Stem_Biomass", "Log_Total_Fruits_MC", "Mean_Ind_Seed_Mass_mg_MC", "Log_Mean_Seeds_per_Fruit_MC", "Log_Lifetime_Fecundity_MC", "Log_Stem_Biomass_MC", "Corolla_Diameter_MC", "Corolla_Area_MC", "Log_Leaf_Area_mm2_MC", "Flowering_Duration_MC")
+# Create a vector that includes ONLY the variables that we want in the final unified dataframe that contains the data for all of the transects.  We're going to include the raw, untransformed values for eHRh trait and the mean-centered values (some of which are based on log-transformed values)
 
+Variables <- c("Population", "Field_Year", "Generation", "Block", "Transect", "Sequence", "Plant_ID", "Donor", "Recipient", "FFD", "LFD", "Total_Fruits", "Mean_Ind_Seed_Mass_mg", "Mean_Seeds_per_Fruit", "Lifetime_Fecundity", "Stem_Biomass", "Corolla_Diameter", "Corolla_Area", "Leaf_Area_mm2", "Flowering_Duration", "Log_Total_Fruits", "Log_Mean_Seeds_per_Fruit", "Log_Lifetime_Fecundity", "Log_Stem_Biomass", "Log_Total_Fruits_MC", "Mean_Ind_Seed_Mass_mg_MC", "Log_Mean_Seeds_per_Fruit_MC", "Log_Lifetime_Fecundity_MC", "Log_Stem_Biomass_MC", "Corolla_Diameter_MC", "Corolla_Area_MC", "Log_Leaf_Area_mm2_MC", "FFD_MC", "LFD_MC", "Flowering_Duration_MC")
 
-HR_MC_Population <- rbind(HRTransect1,HRTransect2,HRTransect3,HRTransect4,HRTransect5,HRTransect6,HRTransect7,HRTransect8, HRTransect9)
+# Combine transects to get mean-centered population data for easy averaging of same maternal IDs
 
-HR_MC_Population <- HR_MC_Population[Variables] 
+HR_MeanCentered_AllTransects <- rbind(HRTransect1,HRTransect2,HRTransect3,HRTransect4,HRTransect5,HRTransect6,HRTransect7,HRTransect8, HRTransect9) # This contains 41 variables
 
-HR_Avg_MC_Population <- HR_MC_Population %>%
+HR_MeanCentered_AllTransects <- HR_MeanCentered_AllTransects[Variables] # Includes only the variables in the "Variables" vector = 35 variables
+
+# Now, let's summarize the data, using the means of the rows representing a given recipient (= Maternal ID) and averaging eHRh maternal ID's values while ignoring NA values. For recipients for which a trait has  values that are ALL NA, this will return a "NaN" for that recipient and trait.
+
+# this code creates a new data frame with the MEAN VALUES for EHRH RECIPIENT and TRAIT
+
+# In other words, these are the means for the mean-centered trait values of eHRh maternal genotype
+
+HR_Avg_MC_Population_ByRecip <- HR_MeanCentered_AllTransects %>%
   group_by(Recipient) %>% #uses the list of unique recipients, without repeated values
   summarise(AMC_Log_Stem_Biomass = mean(Log_Stem_Biomass_MC, na.rm=TRUE), 
             AMC_Corolla_Diameter = mean(Corolla_Diameter_MC, na.rm=TRUE), 
@@ -1240,21 +1264,21 @@ HR_Avg_MC_Population <- HR_MC_Population %>%
             AMC_Log_Mean_Seeds_per_Fruit = mean(Log_Mean_Seeds_per_Fruit_MC, na.rm=TRUE),
             AMC_Mean_Ind_Seed_Mass_mg = mean(Mean_Ind_Seed_Mass_mg_MC, na.rm=TRUE),
             AMC_Log_Leaf_Area_mm2 = mean(Log_Leaf_Area_mm2_MC, na.rm=TRUE),
-            Mean_FFD = mean(FFD, na.rm=TRUE), #not mean-centered
-            Mean_LFD = mean(LFD, na.rm=TRUE), #not mean-centered
+            AMC_FFD = mean(FFD_MC, na.rm=TRUE), 
+            AMC_LFD = mean(LFD_MC, na.rm=TRUE),
             AMC_Flowering_Duration = mean(Flowering_Duration_MC, na.rm=TRUE))
 
-View(HR_Avg_MC_Population)
+View(HR_Avg_MC_Population_ByRecip)
 
 Donors <- c(HRTransect1$Donor, HRTransect2$Donor, HRTransect3$Donor, HRTransect4$Donor, HRTransect5$Donor, HRTransect6$Donor, HRTransect7$Donor, HRTransect8$Donor, HRTransect9$Donor)
 
-Donors <- unique(Donors) 
+Donors <- unique(Donors) # Names of Paternal ID's, without repetition (n=40)
 
 str(Donors)
 ```
 
 ```
-##  chr [1:47] "HR_008" "HR_196" "HR_085" "HR_006" "HR_108" "HR_074" "HR_180" "HR_160" ...
+##  chr [1:46] "HR_008" "HR_196" "HR_085" "HR_006" "HR_108" "HR_074" "HR_180" "HR_160" "HR_070" "HR_133" ...
 ```
 
 ```r
@@ -1262,15 +1286,25 @@ length(Donors)
 ```
 
 ```
-## [1] 47
+## [1] 46
 ```
 
 ```r
+# Create a vector that includes only the variables that we want in the final unified dataframe that contains the data for all of the transects.  We're going to include the raw, untransformed values for eHRh trait and the mean-centered values (some of which are based on log-transformed values)
+
 Variables <- c("Population", "Field_Year", "Generation", "Block", "Transect", "Sequence", "Plant_ID", "Donor", "Recipient", "FFD", "LFD", "Total_Fruits", "Mean_Ind_Seed_Mass_mg", "Mean_Seeds_per_Fruit", "Lifetime_Fecundity", "Stem_Biomass", "Corolla_Diameter", "Corolla_Area", "Leaf_Area_mm2", "Flowering_Duration", "Log_Total_Fruits", "Log_Mean_Seeds_per_Fruit", "Log_Lifetime_Fecundity", "Log_Stem_Biomass", "Log_Total_Fruits_MC", "Mean_Ind_Seed_Mass_mg_MC", "Log_Mean_Seeds_per_Fruit_MC", "Log_Lifetime_Fecundity_MC", "Log_Stem_Biomass_MC", "Corolla_Diameter_MC", "Corolla_Area_MC", "Log_Leaf_Area_mm2_MC", "Flowering_Duration_MC")
+
+# Combine transects bHRk together to get mean-centered population data for easy averaging of same paternal IDs
 
 HR_MC_Population <- rbind(HRTransect1,HRTransect2,HRTransect3,HRTransect4,HRTransect5,HRTransect6,HRTransect7,HRTransect8, HRTransect9)
 
-HR_MC_Population <- HR_MC_Population[Variables]
+HR_MC_Population <- HR_MC_Population[Variables] # Includes only the variables in the "Variables" vector.
+
+# This summarizes the data, using the means of the rows representing a given recipient (= Maternal ID) and averaging eHRh maternal ID's values while ignoring NA values. For recipients for which a trait has  values that are ALL NA, this will return a "NaN" for that recipient and trait.
+
+# this code creates a new data frame with the MEAN VALUES for EHRH RECIPIENT and TRAIT
+
+# In other words, these are the means for the mean-centered trait values of eHRh maternal genotype
 
 HR_Avg_MC_Population_ByDonor <- HR_MC_Population %>%
   group_by(Donor) %>% #uses the list of unique recipients, without repeated values
@@ -1287,4 +1321,25 @@ HR_Avg_MC_Population_ByDonor <- HR_MC_Population %>%
             AMC_Flowering_Duration = mean(Flowering_Duration_MC, na.rm=TRUE))
 
 View(HR_Avg_MC_Population_ByDonor)
+```
+
+
+```r
+# Deal with NaN values, replHRing NaN with "NA"
+
+for(i in 1:nrow(HR_Avg_MC_Population_ByRecip)){
+  for(j in 1:ncol(HR_Avg_MC_Population_ByRecip)){
+    if(HR_Avg_MC_Population_ByRecip[i,j] == "NaN"){
+      HR_Avg_MC_Population_ByRecip[i,j] <- NA
+    }
+  }
+}
+
+for(i in 1:nrow(HR_Avg_MC_Population_ByDonor)){
+  for(j in 1:ncol(HR_Avg_MC_Population_ByDonor)){
+    if(HR_Avg_MC_Population_ByDonor[i,j] == "NaN"){
+      HR_Avg_MC_Population_ByDonor[i,j] <- NA
+    }
+  }
+}
 ```

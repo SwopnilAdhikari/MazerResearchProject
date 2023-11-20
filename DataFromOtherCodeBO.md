@@ -1,16 +1,20 @@
 ---
 title: "DataFromOtherCodeBO"
 output: html_document
-date: "2023-11-20"
+date: "2023-11-17"
 ---
 
 ```r
-library(ggplot2)
+library(Matrix)
 library(dplyr)
-library(visreg)
-library(tidyverse)
-library(readr)
+library(ggplot2)
+library(jtools)
+library(lme4)
+library(lmerTest)
 library(lubridate)
+library(readr)
+library(tidyverse)
+library(visreg)
 
 BO_Data_2022 <- read_csv("~/MazerResearchProject/Data/BO_Data_2022.csv")
 ```
@@ -119,6 +123,10 @@ RecipientV1 <- BOTransect1$Recipient
 FFDV1 <- BOTransect1$FFD
 LFDV1 <- BOTransect1$LFD
 
+# All of these vectors include all of the values in the original data set (BO_Data_2022)
+
+# Remove values of these variables in BOTransect1 (the data frame that contains the variables for which we need to get rid of the outliers)
+
 BOTransect1$Population <-NULL
 BOTransect1$Field_Year <- NULL
 BOTransect1$Generation <- NULL
@@ -130,9 +138,14 @@ BOTransect1$Recipient <- NULL
 BOTransect1$FFD <- NULL
 BOTransect1$LFD <- NULL
 
+
+# z-scores are calculated and the for loop goes tBOough eBOh element of the z-score array (eBOh row and column), looking for values above 3, which implies that the value is an outlier.
+
+# The index (row i, column j) will be removed from the original BOTransect1 data frame.
+
 z_scores <- as.data.frame(sapply(BOTransect1, function(BOTransect1) (abs(BOTransect1-mean(BOTransect1, na.rm = TRUE))/sd(BOTransect1, na.rm = TRUE))))
 
-class(z_scores)
+class(z_scores) # Shows that z_scores is a data_frame
 ```
 
 ```
@@ -140,7 +153,10 @@ class(z_scores)
 ```
 
 ```r
-View(z_scores)
+View(z_scores) # EBOh value is a z_score
+
+# The for loop is as follows.  For eBOh index (row=i, column=j) in the z_score data frame that is > 3, it replBOes the value for that index in Transect1 with an "NA"
+
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
@@ -154,7 +170,15 @@ for(i in 1:nrow(z_scores)){
 
 BOTransect1 <- BOTransect1 %>% mutate(Population = PopulationV1 , Field_Year = Field_YearV1, Generation = GenerationV1, Block = BlockV1, Transect = TransectV1, Sequence = SequenceV1, Donor = DonorV1, Recipient = RecipientV1, FFD = FFDV1, LFD = LFDV1, .before = Left_Or_Right, )
 
-View(BOTransect1)
+print(BOTransect1$Sequence)
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  9 10 11 12 13 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 37 38 40 42
+## [37] 44
+```
+
+```r
 ################################################################################################
 PopulationV2 <- BOTransect2$Population # Creates a vector of Population as charBOter variables
 Field_YearV2 <- BOTransect2$Field_Year
@@ -167,6 +191,8 @@ RecipientV2 <- BOTransect2$Recipient
 FFDV2 <- BOTransect2$FFD
 LFDV2 <- BOTransect2$LFD
 
+
+# Remove values of these variables in BOTransect2 (the data frame that contains the variables for which we want to get rid of the outliers)
 BOTransect2$Population <-NULL
 BOTransect2$Field_Year <- NULL
 BOTransect2$Generation <- NULL
@@ -178,11 +204,13 @@ BOTransect2$Recipient <- NULL
 BOTransect2$FFD <- NULL
 BOTransect2$LFD <- NULL
 
+
+# z-scores are calculated and the for loop goes tBOough eBOh element of the z-score array, looking for values above 3 which implies the value is an outlier and removes that index from the original BOTransect2 data frame
 z_scores <- as.data.frame(sapply(BOTransect2, function(BOTransect2) (abs(BOTransect2-mean(BOTransect2, na.rm = TRUE))/sd(BOTransect2, na.rm = TRUE))))
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      BOTransect1[i,j] = NA
+      BOTransect2[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       BOTransect2[i,j] = NA
@@ -194,7 +222,8 @@ BOTransect2 <- BOTransect2 %>% mutate(Population = PopulationV2 , Field_Year = F
 
 
 View(BOTransect2)
-##################################################################################################
+
+
 PopulationV3 <- BOTransect3$Population # Creates a vector of Population as charBOter variables
 Field_YearV3 <- BOTransect3$Field_Year
 GenerationV3 <- BOTransect3$Generation
@@ -226,7 +255,7 @@ z_scores <- as.data.frame(sapply(BOTransect3, function(BOTransect3) (abs(BOTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      BOTransect1[i,j] = NA
+      BOTransect3[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       BOTransect3[i,j] = NA
@@ -282,7 +311,7 @@ z_scores <- as.data.frame(sapply(BOTransect4, function(BOTransect4) (abs(BOTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      BOTransect1[i,j] = NA
+      BOTransect4[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       BOTransect4[i,j] = NA
@@ -337,7 +366,7 @@ z_scores <- as.data.frame(sapply(BOTransect5, function(BOTransect5) (abs(BOTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      BOTransect1[i,j] = NA
+      BOTransect5[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       BOTransect5[i,j] = NA
@@ -392,7 +421,7 @@ z_scores <- as.data.frame(sapply(BOTransect6, function(BOTransect6) (abs(BOTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      BOTransect1[i,j] = NA
+      BOTransect6[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       BOTransect6[i,j] = NA
@@ -447,7 +476,7 @@ z_scores <- as.data.frame(sapply(BOTransect7, function(BOTransect7) (abs(BOTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      BOTransect1[i,j] = NA
+      BOTransect7[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       BOTransect7[i,j] = NA
@@ -504,7 +533,7 @@ z_scores <- as.data.frame(sapply(BOTransect8, function(BOTransect8) (abs(BOTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      BOTransect1[i,j] = NA
+      BOTransect8[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       BOTransect8[i,j] = NA
@@ -561,7 +590,7 @@ z_scores <- as.data.frame(sapply(BOTransect9, function(BOTransect9) (abs(BOTrans
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      BOTransect1[i,j] = NA
+      BOTransect9[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       BOTransect9[i,j] = NA
@@ -585,6 +614,7 @@ names(BOTransect9)
 ## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
 ## [29] "Log_Leaf_Area_mm2"
 ```
+
 
 ```r
 # Mean-centering the data frame for Transect 1
@@ -615,58 +645,60 @@ BOTransect1 <- BOTransect1 %>% mutate(
   Log_Stem_Biomass_MC = center_scale(Log_Stem_Biomass),
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
+
+View(BOTransect1)
 
 # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
 
-mean(BOTransect1$Stem_Biomass, na.rm=TRUE)
+mean(BOTransect1$Total_Closed_Fruits, na.rm=TRUE)
 ```
 
 ```
-## [1] 8.1
-```
-
-```r
-min(BOTransect1$Stem_Biomass, na.rm=TRUE)
-```
-
-```
-## [1] 8.1
+## [1] 1.371429
 ```
 
 ```r
-max(BOTransect1$Stem_Biomass, na.rm=TRUE)
+min(BOTransect1$Total_Closed_Fruits, na.rm=TRUE)
 ```
 
 ```
-## [1] 8.1
-```
-
-```r
-mean(BOTransect1$Log_Stem_Biomass_MC, na.rm=TRUE)
-```
-
-```
-## [1] -1.707744e-16
+## [1] 0
 ```
 
 ```r
-min(BOTransect1$Log_Stem_Biomass_MC, na.rm=TRUE)
+max(BOTransect1$Total_Closed_Fruits, na.rm=TRUE)
 ```
 
 ```
-## [1] -2.291407
+## [1] 7
 ```
 
 ```r
-max(BOTransect1$Log_Stem_Biomass_MC, na.rm=TRUE)
+mean(BOTransect1$Total_Closed_Fruits_MC, na.rm=TRUE)
 ```
 
 ```
-## [1] 3.134381
+## [1] -3.799354e-17
+```
+
+```r
+min(BOTransect1$Total_Closed_Fruits_MC, na.rm=TRUE)
+```
+
+```
+## [1] -1.371429
+```
+
+```r
+max(BOTransect1$Total_Closed_Fruits_MC, na.rm=TRUE)
+```
+
+```
+## [1] 5.628571
 ```
 
 ```r
@@ -680,8 +712,8 @@ max(BOTransect1$Log_Stem_Biomass_MC, na.rm=TRUE)
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
  # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -744,8 +776,8 @@ max(BOTransect2$Total_Closed_Fruits_MC, na.rm=TRUE)
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
  
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -808,8 +840,8 @@ BOTransect4 <- BOTransect4 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -872,8 +904,8 @@ BOTransect5 <- BOTransect5 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -936,8 +968,8 @@ BOTransect6 <- BOTransect6 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -1000,8 +1032,8 @@ BOTransect7 <- BOTransect7 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -1064,8 +1096,8 @@ BOTransect8 <- BOTransect8 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -1128,8 +1160,8 @@ BOTransect9 <- BOTransect9 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
 View(BOTransect9)
@@ -1188,7 +1220,9 @@ max(BOTransect9$Total_Closed_Fruits_MC, na.rm=TRUE)
 ```r
 Recipients <- c(BOTransect1$Recipient, BOTransect2$Recipient, BOTransect3$Recipient, BOTransect4$Recipient, BOTransect5$Recipient, BOTransect6$Recipient, BOTransect7$Recipient, BOTransect8$Recipient, BOTransect9$Recipient)
 
-Recipients <- unique(Recipients) # Names of maternal ID's, without repetition (n=)
+# Now, modify this vector so that eBOh recipient occurs only once
+
+Recipients <- unique(Recipients) # Names of maternal ID's, without repetition (n=107)
 
 str(Recipients)
 ```
@@ -1206,14 +1240,23 @@ length(Recipients)
 ```
 
 ```r
-Variables <- c("Population", "Field_Year", "Generation", "Block", "Transect", "Sequence", "Plant_ID", "Donor", "Recipient", "FFD", "LFD", "Total_Fruits", "Mean_Ind_Seed_Mass_mg", "Mean_Seeds_per_Fruit", "Lifetime_Fecundity", "Stem_Biomass", "Corolla_Diameter", "Corolla_Area", "Leaf_Area_mm2", "Flowering_Duration", "Log_Total_Fruits", "Log_Mean_Seeds_per_Fruit", "Log_Lifetime_Fecundity", "Log_Stem_Biomass", "Log_Total_Fruits_MC", "Mean_Ind_Seed_Mass_mg_MC", "Log_Mean_Seeds_per_Fruit_MC", "Log_Lifetime_Fecundity_MC", "Log_Stem_Biomass_MC", "Corolla_Diameter_MC", "Corolla_Area_MC", "Log_Leaf_Area_mm2_MC", "Flowering_Duration_MC")
+# Create a vector that includes ONLY the variables that we want in the final unified dataframe that contains the data for all of the transects.  We're going to include the raw, untransformed values for eBOh trait and the mean-centered values (some of which are based on log-transformed values)
 
+Variables <- c("Population", "Field_Year", "Generation", "Block", "Transect", "Sequence", "Plant_ID", "Donor", "Recipient", "FFD", "LFD", "Total_Fruits", "Mean_Ind_Seed_Mass_mg", "Mean_Seeds_per_Fruit", "Lifetime_Fecundity", "Stem_Biomass", "Corolla_Diameter", "Corolla_Area", "Leaf_Area_mm2", "Flowering_Duration", "Log_Total_Fruits", "Log_Mean_Seeds_per_Fruit", "Log_Lifetime_Fecundity", "Log_Stem_Biomass", "Log_Total_Fruits_MC", "Mean_Ind_Seed_Mass_mg_MC", "Log_Mean_Seeds_per_Fruit_MC", "Log_Lifetime_Fecundity_MC", "Log_Stem_Biomass_MC", "Corolla_Diameter_MC", "Corolla_Area_MC", "Log_Leaf_Area_mm2_MC", "FFD_MC", "LFD_MC", "Flowering_Duration_MC")
 
-BO_MC_Population <- rbind(BOTransect1,BOTransect2,BOTransect3,BOTransect4,BOTransect5,BOTransect6,BOTransect7,BOTransect8, BOTransect9)
+# Combine transects to get mean-centered population data for easy averaging of same maternal IDs
 
-BO_MC_Population <- BO_MC_Population[Variables] 
+BO_MeanCentered_AllTransects <- rbind(BOTransect1,BOTransect2,BOTransect3,BOTransect4,BOTransect5,BOTransect6,BOTransect7,BOTransect8, BOTransect9) # This contains 41 variables
 
-BO_Avg_MC_Population <- BO_MC_Population %>%
+BO_MeanCentered_AllTransects <- BO_MeanCentered_AllTransects[Variables] # Includes only the variables in the "Variables" vector = 35 variables
+
+# Now, let's summarize the data, using the means of the rows representing a given recipient (= Maternal ID) and averaging eBOh maternal ID's values while ignoring NA values. For recipients for which a trait has  values that are ALL NA, this will return a "NaN" for that recipient and trait.
+
+# this code creates a new data frame with the MEAN VALUES for EBOH RECIPIENT and TRAIT
+
+# In other words, these are the means for the mean-centered trait values of eBOh maternal genotype
+
+BO_Avg_MC_Population_ByRecip <- BO_MeanCentered_AllTransects %>%
   group_by(Recipient) %>% #uses the list of unique recipients, without repeated values
   summarise(AMC_Log_Stem_Biomass = mean(Log_Stem_Biomass_MC, na.rm=TRUE), 
             AMC_Corolla_Diameter = mean(Corolla_Diameter_MC, na.rm=TRUE), 
@@ -1223,15 +1266,15 @@ BO_Avg_MC_Population <- BO_MC_Population %>%
             AMC_Log_Mean_Seeds_per_Fruit = mean(Log_Mean_Seeds_per_Fruit_MC, na.rm=TRUE),
             AMC_Mean_Ind_Seed_Mass_mg = mean(Mean_Ind_Seed_Mass_mg_MC, na.rm=TRUE),
             AMC_Log_Leaf_Area_mm2 = mean(Log_Leaf_Area_mm2_MC, na.rm=TRUE),
-            Mean_FFD = mean(FFD, na.rm=TRUE), #not mean-centered
-            Mean_LFD = mean(LFD, na.rm=TRUE), #not mean-centered
+            AMC_FFD = mean(FFD_MC, na.rm=TRUE), 
+            AMC_LFD = mean(LFD_MC, na.rm=TRUE),
             AMC_Flowering_Duration = mean(Flowering_Duration_MC, na.rm=TRUE))
 
-View(BO_Avg_MC_Population)
+View(BO_Avg_MC_Population_ByRecip)
 
 Donors <- c(BOTransect1$Donor, BOTransect2$Donor, BOTransect3$Donor, BOTransect4$Donor, BOTransect5$Donor, BOTransect6$Donor, BOTransect7$Donor, BOTransect8$Donor, BOTransect9$Donor)
 
-Donors <- unique(Donors) 
+Donors <- unique(Donors) # Names of Paternal ID's, without repetition (n=40)
 
 str(Donors)
 ```
@@ -1249,11 +1292,21 @@ length(Donors)
 ```
 
 ```r
+# Create a vector that includes only the variables that we want in the final unified dataframe that contains the data for all of the transects.  We're going to include the raw, untransformed values for eBOh trait and the mean-centered values (some of which are based on log-transformed values)
+
 Variables <- c("Population", "Field_Year", "Generation", "Block", "Transect", "Sequence", "Plant_ID", "Donor", "Recipient", "FFD", "LFD", "Total_Fruits", "Mean_Ind_Seed_Mass_mg", "Mean_Seeds_per_Fruit", "Lifetime_Fecundity", "Stem_Biomass", "Corolla_Diameter", "Corolla_Area", "Leaf_Area_mm2", "Flowering_Duration", "Log_Total_Fruits", "Log_Mean_Seeds_per_Fruit", "Log_Lifetime_Fecundity", "Log_Stem_Biomass", "Log_Total_Fruits_MC", "Mean_Ind_Seed_Mass_mg_MC", "Log_Mean_Seeds_per_Fruit_MC", "Log_Lifetime_Fecundity_MC", "Log_Stem_Biomass_MC", "Corolla_Diameter_MC", "Corolla_Area_MC", "Log_Leaf_Area_mm2_MC", "Flowering_Duration_MC")
+
+# Combine transects bBOk together to get mean-centered population data for easy averaging of same paternal IDs
 
 BO_MC_Population <- rbind(BOTransect1,BOTransect2,BOTransect3,BOTransect4,BOTransect5,BOTransect6,BOTransect7,BOTransect8, BOTransect9)
 
-BO_MC_Population <- BO_MC_Population[Variables]
+BO_MC_Population <- BO_MC_Population[Variables] # Includes only the variables in the "Variables" vector.
+
+# This summarizes the data, using the means of the rows representing a given recipient (= Maternal ID) and averaging eBOh maternal ID's values while ignoring NA values. For recipients for which a trait has  values that are ALL NA, this will return a "NaN" for that recipient and trait.
+
+# this code creates a new data frame with the MEAN VALUES for EBOH RECIPIENT and TRAIT
+
+# In other words, these are the means for the mean-centered trait values of eBOh maternal genotype
 
 BO_Avg_MC_Population_ByDonor <- BO_MC_Population %>%
   group_by(Donor) %>% #uses the list of unique recipients, without repeated values
@@ -1270,4 +1323,23 @@ BO_Avg_MC_Population_ByDonor <- BO_MC_Population %>%
             AMC_Flowering_Duration = mean(Flowering_Duration_MC, na.rm=TRUE))
 
 View(BO_Avg_MC_Population_ByDonor)
+```
+
+
+```r
+for(i in 1:nrow(BO_Avg_MC_Population_ByRecip)){
+  for(j in 1:ncol(BO_Avg_MC_Population_ByRecip)){
+    if(BO_Avg_MC_Population_ByRecip[i,j] == "NaN"){
+      BO_Avg_MC_Population_ByRecip[i,j] <- NA
+    }
+  }
+}
+
+for(i in 1:nrow(BO_Avg_MC_Population_ByDonor)){
+  for(j in 1:ncol(BO_Avg_MC_Population_ByDonor)){
+    if(BO_Avg_MC_Population_ByDonor[i,j] == "NaN"){
+      BO_Avg_MC_Population_ByDonor[i,j] <- NA
+    }
+  }
+}
 ```

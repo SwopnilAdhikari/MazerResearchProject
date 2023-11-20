@@ -1,237 +1,36 @@
 ---
-title: "Full AC Analysis"
-output:
-  pdf_document: default
-  html_document: default
-date: "2023-11-05"
+title: "DataFromOtherCodeAC"
+output: html_document
+date: "2023-11-17"
 ---
-
 ```{r}
-# Putting data-transforming packages into R
-# Don't forget to also import in the csv file with all the data
 
-library(ggplot2)
+library(Matrix)
 library(dplyr)
-library(visreg)
-library(tidyverse)
-library(readr)
+library(ggplot2)
+library(jtools)
+library(lme4)
+library(lmerTest)
 library(lubridate)
-
+library(readr)
+library(tidyverse)
+library(visreg)
 
 AC_Data_2022 <- read_csv("~/MazerResearchProject/Data/AC_Data_2022.csv")
+```
 
-
-#Do the following using mutate:
-
-AC_Data_2022 <- AC_Data_2022 %>% mutate(FFD = yday(mdy(FFD)), LFD = yday(mdy(LFD)), Flowering_Duration = LFD-FFD) # Change the date as a character variable to month-day-year, and then change this to a number between 1 and 365
+```{r}
+AC_Data_2022 <- AC_Data_2022 %>% mutate(FFD = yday(mdy(FFD)), LFD = yday(mdy(LFD)), Flowering_Duration = LFD-FFD) 
 
 AC_Data_2022$Flowering_Duration - AC_Data_2022$fl_duration
-  
-  
-#AC_Data_2022$FFD <- mdy(AC_Data_2022$FFD) # Converts character variable to month-day-year, which can then be converted to day-of-year
 
-#AC_Data_2022$FFD <- yday(AC_Data_2022$FFD) # Converts Date variable to day-of-year, which is a numeric variable, and  can be mean-centered
-
-
-#AC_Data_2022$LFD <- mdy(AC_Data_2022$LFD)
-
-#AC_Data_2022$LFD <- yday(AC_Data_2022$LFD)
-
-hist(AC_Data_2022$FFD)
-plot(AC_Data_2022$FFD, AC_Data_2022$LFD)
-plot(AC_Data_2022$FFD, AC_Data_2022$Flowering_Duration)
-plot(AC_Data_2022$LFD, AC_Data_2022$Flowering_Duration)
-
-```
-
-########################################################################################
-############################### DATA PREPARATION ####################################### 
-########################################################################################
-
-
-
-# Visualize frequency distributions of traits (raw values and log-transformed) to see which ones may need transformation prior to analysis
-
-```{r}
-
-names(AC_Data_2022)
-
-
-ggplot(AC_Data_2022, aes(Total_Fruits)) +
-  geom_histogram(bins=15) +
-  xlab("Total_Fruits") +
-  ggtitle("Total_Fruits")
-
-ggplot(AC_Data_2022, aes(log(Total_Fruits))) +
-  geom_histogram(bins=15) +
-  xlab("Log(Total Fruits)") +
-  ggtitle("Log(Total_Fruits)")
-
-#***************
-ggplot(AC_Data_2022, aes(Mean_Ind_Seed_Mass_mg)) +
-  geom_histogram(bins=15) +
-  xlab("Mean_Ind_Seed_Mass_mg") +
-  ggtitle("Mean_Ind_Seed_Mass_mg")
-
-#***************
-ggplot(AC_Data_2022, aes(Mean_Seeds_per_Fruit)) +
-  geom_histogram(bins=15) +
-  xlab("Mean_Seeds_per_Fruit") +
-  ggtitle("Mean_Seeds_per_Fruit")
-
-ggplot(AC_Data_2022, aes(log(Mean_Seeds_per_Fruit))) +
-  geom_histogram(bins=15) +
-  xlab("log(Mean_Seeds_per_Fruit)") +
-  ggtitle("log(Mean_Seeds_per_Fruit)")
-
-#***************
-
-ggplot(AC_Data_2022, aes(Lifetime_Fecundity)) +
-  geom_histogram(bins=15) +
-  xlab("Lifetime_Fecundity") +
-  ggtitle("Lifetime_Fecundity")
-
-ggplot(AC_Data_2022, aes(log(Lifetime_Fecundity))) +
-  geom_histogram(bins=15) +
-  xlab("log(Lifetime_Fecundity)") +
-  ggtitle("log(Lifetime_Fecundity)")
-
-#***************
-
-ggplot(AC_Data_2022, aes(Stem_Biomass)) +
-  geom_histogram(bins=15) +
-  xlab("Stem_Biomass (mg)") +
-  ggtitle("AC_Data_2022")
-
-ggplot(AC_Data_2022, aes(log(Stem_Biomass))) +
-  geom_histogram(bins=15) +
-  xlab("log(Stem Biomass), mg") +
-  ggtitle("log(Stem Biomass), mg")
-
-
-#***************
-
-ggplot(AC_Data_2022, aes(Corolla_Diameter)) +
-  geom_histogram(bins=15) +
-  xlab("Corolla_Diameter (mm)") +
-  ggtitle("Corolla_Diameter")
-
-ggplot(AC_Data_2022, aes(log(Corolla_Diameter))) +
-  geom_histogram(bins=15) +
-  xlab("log(Corolla_Diameter), mm") +
-  ggtitle("log(Corolla_Diameter)")
-
-#***************
-
-ggplot(AC_Data_2022, aes(Corolla_Area)) +
-  geom_histogram(bins=15) +
-  xlab("Corolla_Area (mm^2)") +
-  ggtitle("Corolla_Area (mm^2)")
-
-ggplot(AC_Data_2022, aes(log(Corolla_Area))) +
-  geom_histogram(bins=15) +
-  xlab("log(Corolla_Area), mm^2") +
-  ggtitle("log(Corolla_Area)")
-
-#***************
-
-ggplot(AC_Data_2022, aes(Leaf_Area_mm2)) +
-  geom_histogram(bins=15) +
-  xlab("Leaf_Area_mm2") +
-  ggtitle("Leaf_Area_mm2")
-
-ggplot(AC_Data_2022, aes(log(Leaf_Area_mm2))) +
-  geom_histogram(bins=15) +
-  xlab("log(Leaf_Area), mm^2") +
-  ggtitle("log(Leaf_Area)")
-
-#***************
-
-ggplot(AC_Data_2022, aes(FFD)) +
-  geom_histogram(bins=15) +
-  xlab("First Flowering Date") +
-  ggtitle("First Flowering Date")
-
-ggplot(AC_Data_2022, aes(log(FFD))) +
-  geom_histogram(bins=15) +
-  xlab("log(First Flowering Date)") +
-  ggtitle("log(First Flowering Date)")
-
-#***************
-
-ggplot(AC_Data_2022, aes(LFD)) +
-  geom_histogram(bins=15) +
-  xlab("Last Flowering Date") +
-  ggtitle("Last Flowering Date")
-
-ggplot(AC_Data_2022, aes(log(LFD))) +
-  geom_histogram(bins=15) +
-  xlab("log(Last Flowering Date)") +
-  ggtitle("log(Last Flowering Date)")
-
-#***************
-
-ggplot(AC_Data_2022, aes(Flowering_Duration)) +
-  geom_histogram(bins=15) +
-  xlab("Flowering Duration (days)") +
-  ggtitle("Flowering Duration (days)")
-
-ggplot(AC_Data_2022, aes(log(Flowering_Duration))) +
-  geom_histogram(bins=15) +
-  xlab("log(Flowering_Duration (days))") +
-  ggtitle("log(Flowering_Duration (days))")
-
-```
-
-# Identify variables that require transformation
-
-log(Total_Fruits)
-log(Mean_Seeds_per_Fruit)
-log(Lifetime_Fecundity)
-log(Stem_Biomass)
-log(Leaf_Area_mm2)
-
-# Don't need to transform
-
-Mean_Ind_Seed_Mass_mg
-Corolla_Diameter
-Corolla_Area
-Flowering_Duration
-
-# Make a factor variable (categorical), due to there being two few possible values to use as a continuous variable
-
-FFD
-LFD
-
-
-
-# Create a new AC_Data_2022 data frame with log-transformed values of the variables that require log-transformation to be more normally distributed 
-
-```{r}
-
-min(AC_Data_2022$Total_Fruits, na.rm=TRUE) # If minimum = 0, then must add 1 to log-transform
+min(AC_Data_2022$Total_Fruits, na.rm=TRUE) 
 min(AC_Data_2022$Mean_Seeds_per_Fruit, na.rm=TRUE)
 min(AC_Data_2022$Lifetime_Fecundity, na.rm=TRUE)
 min(AC_Data_2022$Stem_Biomass, na.rm=TRUE)
 min(AC_Data_2022$Leaf_Area_mm2, na.rm=TRUE)
 
-# Add 1 to raw values of variables for which the minimum value is 0.  These variables are: Total_Fruits, Mean_Seeds_per_Fruit, Lifetime_Fecundity.
-
 AC_Data_2022 <- AC_Data_2022 %>% mutate(Log_Total_Fruits=log(Total_Fruits+1), Log_Mean_Seeds_per_Fruit=log(Mean_Seeds_per_Fruit+1), Log_Lifetime_Fecundity=log(Lifetime_Fecundity+1), Log_Stem_Biomass=log(Stem_Biomass), Log_Leaf_Area_mm2=log(Leaf_Area_mm2))
-
-# Transform FFD and LFD to factor variables
-#AC_Data_2022$FFD <- as.factor(AC_Data_2022$FFD)
-#AC_Data_2022$LFD <- as.factor(AC_Data_2022$LFD)
-
-```
-
-
-```{r}
-# Splitting the main data frame into transects for mean-centering and removal of outliers
-
-#Block1 <- subset(AC_Data_2022, Block == 1)
-#Block2 <- subset(AC_Data_2022, Block == 2)
-#Block3 <- subset(AC_Data_2022, Block == 3)
 
 ACTransect1 <- subset(AC_Data_2022, Transect == 1)
 ACTransect2 <- subset(AC_Data_2022, Transect == 2)
@@ -243,23 +42,15 @@ ACTransect7 <- subset(AC_Data_2022, Transect == 7)
 ACTransect8 <- subset(AC_Data_2022, Transect == 8)
 ACTransect9 <- subset(AC_Data_2022, Transect == 9)
 
-# Creating mean-centering function
 
 center_scale <- function(x) {
   scale(x, scale = FALSE)
 }
 
-
 ```
 
-# Remove outliers from Transect 1
-
 ```{r}
-# For our continuous variables, remove outliers by getting rid of values that have a |z-score| > 3
-
-# Create vectors of variables in NON-numeric columns (those for which z-scores aren't relevant: Population, Field_Year, Generation, Block, Transect, Sequence, Donor, Recipient, FFD, and LFD) first and return these vectors to the data set after the outliers have been removed from the continuous variables' values
-
-PopulationV1 <- ACTransect1$Population # Creates a vector of Population as character variables
+PopulationV1 <- ACTransect1$Population # Creates a vector of Population as charACter variables
 Field_YearV1 <- ACTransect1$Field_Year
 GenerationV1 <- ACTransect1$Generation
 BlockV1 <- ACTransect1$Block
@@ -270,8 +61,10 @@ RecipientV1 <- ACTransect1$Recipient
 FFDV1 <- ACTransect1$FFD
 LFDV1 <- ACTransect1$LFD
 
+# All of these vectors include all of the values in the original data set (AC_Data_2022)
 
 # Remove values of these variables in ACTransect1 (the data frame that contains the variables for which we need to get rid of the outliers)
+
 ACTransect1$Population <-NULL
 ACTransect1$Field_Year <- NULL
 ACTransect1$Generation <- NULL
@@ -284,7 +77,7 @@ ACTransect1$FFD <- NULL
 ACTransect1$LFD <- NULL
 
 
-# z-scores are calculated and the for loop goes through each element of the z-score array (each row and column), looking for values above 3, which implies that the value is an outlier.
+# z-scores are calculated and the for loop goes tACough eACh element of the z-score array (eACh row and column), looking for values above 3, which implies that the value is an outlier.
 
 # The index (row i, column j) will be removed from the original ACTransect1 data frame.
 
@@ -292,9 +85,9 @@ z_scores <- as.data.frame(sapply(ACTransect1, function(ACTransect1) (abs(ACTrans
 
 class(z_scores) # Shows that z_scores is a data_frame
 
-View(z_scores) # Each value is a z_score
+View(z_scores) # EACh value is a z_score
 
-# The for loop is as follows.  For each index (row=i, column=j) in the z_score data frame that is > 3, it replaces the value for that index in Transect1 with an "NA"
+# The for loop is as follows.  For eACh index (row=i, column=j) in the z_score data frame that is > 3, it replACes the value for that index in Transect1 with an "NA"
 
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
@@ -309,18 +102,9 @@ for(i in 1:nrow(z_scores)){
 
 ACTransect1 <- ACTransect1 %>% mutate(Population = PopulationV1 , Field_Year = Field_YearV1, Generation = GenerationV1, Block = BlockV1, Transect = TransectV1, Sequence = SequenceV1, Donor = DonorV1, Recipient = RecipientV1, FFD = FFDV1, LFD = LFDV1, .before = Left_Or_Right, )
 
-View(ACTransect1)
-
-```
-
-
-# Remove outliers from Transects 2-9
-
-
-```{r}
-# Remove outliers from Transect 2
-
-PopulationV2 <- ACTransect2$Population # Creates a vector of Population as character variables
+print(ACTransect1$Sequence)
+################################################################################################
+PopulationV2 <- ACTransect2$Population # Creates a vector of Population as charACter variables
 Field_YearV2 <- ACTransect2$Field_Year
 GenerationV2 <- ACTransect2$Generation
 BlockV2 <- ACTransect2$Block
@@ -345,12 +129,12 @@ ACTransect2$FFD <- NULL
 ACTransect2$LFD <- NULL
 
 
-# z-scores are calculated and the for loop goes through each element of the z-score array, looking for values above 3 which implies the value is an outlier and removes that index from the original ACTransect2 data frame
+# z-scores are calculated and the for loop goes tACough eACh element of the z-score array, looking for values above 3 which implies the value is an outlier and removes that index from the original ACTransect2 data frame
 z_scores <- as.data.frame(sapply(ACTransect2, function(ACTransect2) (abs(ACTransect2-mean(ACTransect2, na.rm = TRUE))/sd(ACTransect2, na.rm = TRUE))))
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      ACTransect1[i,j] = NA
+      ACTransect2[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       ACTransect2[i,j] = NA
@@ -364,7 +148,7 @@ ACTransect2 <- ACTransect2 %>% mutate(Population = PopulationV2 , Field_Year = F
 View(ACTransect2)
 
 
-PopulationV3 <- ACTransect3$Population # Creates a vector of Population as character variables
+PopulationV3 <- ACTransect3$Population # Creates a vector of Population as charACter variables
 Field_YearV3 <- ACTransect3$Field_Year
 GenerationV3 <- ACTransect3$Generation
 BlockV3 <- ACTransect3$Block
@@ -390,12 +174,12 @@ ACTransect3$LFD <- NULL
 
 
 
-# z-scores are calculated and the for loop goes through each element of the z-score array, looking for values above 3 which implies the value is an outlier and removes that index from the original ACTransect3 data frame
+# z-scores are calculated and the for loop goes tACough eACh element of the z-score array, looking for values above 3 which implies the value is an outlier and removes that index from the original ACTransect3 data frame
 z_scores <- as.data.frame(sapply(ACTransect3, function(ACTransect3) (abs(ACTransect3-mean(ACTransect3, na.rm = TRUE))/sd(ACTransect3, na.rm = TRUE))))
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      ACTransect1[i,j] = NA
+      ACTransect3[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       ACTransect3[i,j] = NA
@@ -409,7 +193,7 @@ ACTransect3 <- ACTransect3 %>% mutate(Population = PopulationV3 , Field_Year = F
 names(ACTransect3)
 
 
-PopulationV4 <- ACTransect4$Population # Creates a vector of Population as character variables
+PopulationV4 <- ACTransect4$Population # Creates a vector of Population as charACter variables
 Field_YearV4 <- ACTransect4$Field_Year
 GenerationV4 <- ACTransect4$Generation
 BlockV4 <- ACTransect4$Block
@@ -434,12 +218,12 @@ ACTransect4$FFD <- NULL
 ACTransect4$LFD <- NULL
 
 
-# z-scores are calculated and the for loop goes through each element of the z-score array, looking for values above 4 which implies the value is an outlier and removes that index from the original ACTransect4 data frame
+# z-scores are calculated and the for loop goes tACough eACh element of the z-score array, looking for values above 4 which implies the value is an outlier and removes that index from the original ACTransect4 data frame
 z_scores <- as.data.frame(sapply(ACTransect4, function(ACTransect4) (abs(ACTransect4-mean(ACTransect4, na.rm = TRUE))/sd(ACTransect4, na.rm = TRUE))))
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      ACTransect1[i,j] = NA
+      ACTransect4[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       ACTransect4[i,j] = NA
@@ -452,7 +236,7 @@ ACTransect4 <- ACTransect4 %>% mutate(Population = PopulationV4 , Field_Year = F
 names(ACTransect4)
 
 
-PopulationV5 <- ACTransect5$Population # Creates a vector of Population as character variables
+PopulationV5 <- ACTransect5$Population # Creates a vector of Population as charACter variables
 Field_YearV5 <- ACTransect5$Field_Year
 GenerationV5 <- ACTransect5$Generation
 BlockV5 <- ACTransect5$Block
@@ -477,12 +261,12 @@ ACTransect5$FFD <- NULL
 ACTransect5$LFD <- NULL
 
 
-# z-scores are calculated and the for loop goes through each element of the z-score array, looking for values above 5 which implies the value is an outlier and removes that index from the original ACTransect5 data frame
+# z-scores are calculated and the for loop goes tACough eACh element of the z-score array, looking for values above 5 which implies the value is an outlier and removes that index from the original ACTransect5 data frame
 z_scores <- as.data.frame(sapply(ACTransect5, function(ACTransect5) (abs(ACTransect5-mean(ACTransect5, na.rm = TRUE))/sd(ACTransect5, na.rm = TRUE))))
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      ACTransect1[i,j] = NA
+      ACTransect5[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       ACTransect5[i,j] = NA
@@ -496,7 +280,7 @@ names(ACTransect5)
 
 
 
-PopulationV6 <- ACTransect6$Population # Creates a vector of Population as character variables
+PopulationV6 <- ACTransect6$Population # Creates a vector of Population as charACter variables
 Field_YearV6 <- ACTransect6$Field_Year
 GenerationV6 <- ACTransect6$Generation
 BlockV6 <- ACTransect6$Block
@@ -521,12 +305,12 @@ ACTransect6$FFD <- NULL
 ACTransect6$LFD <- NULL
 
 
-# z-scores are calculated and the for loop goes through each element of the z-score array, looking for values above 6 which implies the value is an outlier and removes that index from the original ACTransect6 data frame
+# z-scores are calculated and the for loop goes tACough eACh element of the z-score array, looking for values above 6 which implies the value is an outlier and removes that index from the original ACTransect6 data frame
 z_scores <- as.data.frame(sapply(ACTransect6, function(ACTransect6) (abs(ACTransect6-mean(ACTransect6, na.rm = TRUE))/sd(ACTransect6, na.rm = TRUE))))
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      ACTransect1[i,j] = NA
+      ACTransect6[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       ACTransect6[i,j] = NA
@@ -542,7 +326,7 @@ names(ACTransect6)
 
 
 
-PopulationV7 <- ACTransect7$Population # Creates a vector of Population as character variables
+PopulationV7 <- ACTransect7$Population # Creates a vector of Population as charACter variables
 Field_YearV7 <- ACTransect7$Field_Year
 GenerationV7 <- ACTransect7$Generation
 BlockV7 <- ACTransect7$Block
@@ -566,12 +350,12 @@ ACTransect7$Recipient <- NULL
 ACTransect7$FFD <- NULL
 ACTransect7$LFD <- NULL
 
-# z-scores are calculated and the for loop goes through each element of the z-score array, looking for values above 7 which implies the value is an outlier and removes that index from the original ACTransect1 data frame
+# z-scores are calculated and the for loop goes tACough eACh element of the z-score array, looking for values above 7 which implies the value is an outlier and removes that index from the original ACTransect1 data frame
 z_scores <- as.data.frame(sapply(ACTransect7, function(ACTransect7) (abs(ACTransect7-mean(ACTransect7, na.rm = TRUE))/sd(ACTransect7, na.rm = TRUE))))
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      ACTransect1[i,j] = NA
+      ACTransect7[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       ACTransect7[i,j] = NA
@@ -587,7 +371,7 @@ names(ACTransect7)
 
 
 
-PopulationV8 <- ACTransect8$Population # Creates a vector of Population as character variables
+PopulationV8 <- ACTransect8$Population # Creates a vector of Population as charACter variables
 Field_YearV8 <- ACTransect8$Field_Year
 GenerationV8 <- ACTransect8$Generation
 BlockV8 <- ACTransect8$Block
@@ -613,12 +397,12 @@ ACTransect8$LFD <- NULL
 
 
 
-# z-scores are calculated and the for loop goes through each element of the z-score array, looking for values above 8 which implies the value is an outlier and removes that index from the original ACTransect data frame
+# z-scores are calculated and the for loop goes tACough eACh element of the z-score array, looking for values above 8 which implies the value is an outlier and removes that index from the original ACTransect data frame
 z_scores <- as.data.frame(sapply(ACTransect8, function(ACTransect8) (abs(ACTransect8-mean(ACTransect8, na.rm = TRUE))/sd(ACTransect8, na.rm = TRUE))))
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      ACTransect1[i,j] = NA
+      ACTransect8[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       ACTransect8[i,j] = NA
@@ -632,7 +416,7 @@ ACTransect8 <- ACTransect8 %>% mutate(Population = PopulationV8 , Field_Year = F
 names(ACTransect8)
 
 
-PopulationV9 <- ACTransect9$Population # Creates a vector of Population as character variables
+PopulationV9 <- ACTransect9$Population # Creates a vector of Population as charACter variables
 Field_YearV9 <- ACTransect9$Field_Year
 GenerationV9 <- ACTransect9$Generation
 BlockV9 <- ACTransect9$Block
@@ -658,12 +442,12 @@ ACTransect9$LFD <- NULL
 
 
 
-# z-scores are calculated and the for loop goes through each element of the z-score array, looking for values above 9 which implies the value is an outlier and removes that index from the original ACTransect9 data frame
+# z-scores are calculated and the for loop goes tACough eACh element of the z-score array, looking for values above 9 which implies the value is an outlier and removes that index from the original ACTransect9 data frame
 z_scores <- as.data.frame(sapply(ACTransect9, function(ACTransect9) (abs(ACTransect9-mean(ACTransect9, na.rm = TRUE))/sd(ACTransect9, na.rm = TRUE))))
 for(i in 1:nrow(z_scores)){
   for(j in 1:ncol(z_scores)){
     if(is.na(z_scores[i,j])){
-      ACTransect1[i,j] = NA
+      ACTransect9[i,j] = NA
     }
       else if(z_scores[i,j] > 3){
       ACTransect9[i,j] = NA
@@ -675,20 +459,7 @@ ACTransect9 <- ACTransect9 %>% mutate(Population = PopulationV9 , Field_Year = F
 
 
 names(ACTransect9)
-
-
 ```
-
-Mean-center data for Transects 1-9
-
-# Remember the variables that for which we'll use log-transformed data
-
-log(Total_Fruits)
-log(Mean_Seeds_per_Fruit)
-log(Lifetime_Fecundity)
-log(Stem_Biomass)
-log(Leaf_Area_mm2)
-
 
 ```{r}
 # Mean-centering the data frame for Transect 1
@@ -705,20 +476,22 @@ ACTransect1 <- ACTransect1 %>% mutate(
   Log_Stem_Biomass_MC = center_scale(Log_Stem_Biomass),
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
+
+View(ACTransect1)
 
 # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
 
-mean(ACTransect1$Stem_Biomass, na.rm=TRUE)
-min(ACTransect1$Stem_Biomass, na.rm=TRUE)
-max(ACTransect1$Stem_Biomass, na.rm=TRUE)
+mean(ACTransect1$Total_Closed_Fruits, na.rm=TRUE)
+min(ACTransect1$Total_Closed_Fruits, na.rm=TRUE)
+max(ACTransect1$Total_Closed_Fruits, na.rm=TRUE)
 
-mean(ACTransect1$Log_Stem_Biomass_MC, na.rm=TRUE)
-min(ACTransect1$Log_Stem_Biomass_MC, na.rm=TRUE)
-max(ACTransect1$Log_Stem_Biomass_MC, na.rm=TRUE)
+mean(ACTransect1$Total_Closed_Fruits_MC, na.rm=TRUE)
+min(ACTransect1$Total_Closed_Fruits_MC, na.rm=TRUE)
+max(ACTransect1$Total_Closed_Fruits_MC, na.rm=TRUE)
 
 
  ACTransect2 <- ACTransect2 %>% mutate(
@@ -731,8 +504,8 @@ max(ACTransect1$Log_Stem_Biomass_MC, na.rm=TRUE)
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
  # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -756,8 +529,8 @@ max(ACTransect2$Total_Closed_Fruits_MC, na.rm=TRUE)
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
  
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -781,8 +554,8 @@ ACTransect4 <- ACTransect4 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -806,8 +579,8 @@ ACTransect5 <- ACTransect5 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -831,8 +604,8 @@ ACTransect6 <- ACTransect6 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -856,8 +629,8 @@ ACTransect7 <- ACTransect7 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -881,8 +654,8 @@ ACTransect8 <- ACTransect8 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
   # Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
@@ -906,8 +679,8 @@ ACTransect9 <- ACTransect9 %>% mutate(
   Corolla_Diameter_MC = center_scale(Corolla_Diameter),
   Corolla_Area_MC = center_scale(Corolla_Area),
   Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
-  #FFD_MC = center_scale(FFD),
-  #LFD_MC = center_scale(LFD),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
 
 View(ACTransect9)
@@ -923,79 +696,35 @@ mean(ACTransect9$Total_Closed_Fruits_MC, na.rm=TRUE)
 min(ACTransect9$Total_Closed_Fruits_MC, na.rm=TRUE)
 max(ACTransect9$Total_Closed_Fruits_MC, na.rm=TRUE)
 
-
-
-```
-# Visualize mean-centered values for individual transects
-
-
-```{r}
-
-ggplot(ACTransect1, aes(Log_Total_Fruits)) +
-  geom_histogram(bins=15) +
-  xlab("Log(Total_Fruits)") +
-  ggtitle("Log(Total_Fruits)")
-
-ggplot(ACTransect1, aes(Log_Total_Fruits_MC)) +
-  geom_histogram(bins=15) +
-  xlab("Mean-Centered Log(Total_Fruits)") +
-  ggtitle("Mean-Centered Log(Total_Fruits)")
-
-ggplot(ACTransect1, aes(Mean_Ind_Seed_Mass_mg)) +
-  geom_histogram(bins=15) +
-  xlab("Mean Individual Seed Mass (mg)") +
-  ggtitle("Mean Individual Seed Mass")
-
-ggplot(ACTransect1, aes(Mean_Ind_Seed_Mass_mg_MC)) +
-  geom_histogram(bins=15) +
-  xlab("Mean-Centered Mean Individual Seed Mass (mg)") +
-  ggtitle("Mean-Centered Mean Individual Seed Mass")
-
-
-ggplot(ACTransect1, aes(Log_Lifetime_Fecundity)) +
-  geom_histogram(bins=15) +
-  xlab("Log(Lifetime Fecundity)") +
-  ggtitle("Log(Lifetime Fecundity)")
-
-ggplot(ACTransect1, aes(Log_Lifetime_Fecundity_MC)) +
-  geom_histogram(bins=15) +
-  xlab("Mean-Centered Log(Lifetime_Fecundity)") +
-  ggtitle("Mean-Centered Log(Lifetime_Fecundity)")
-
-# EXERCISE for YOU: Repeat this process with other transects and traits!
-
 ```
 
-
-
 ```{r}
-# For maternal ID's across multiple Transects, take the average of their values. Use a for loop to create a new data frame called "Combined Transects" that combines all the transects' data together. Maternal ID's that are shared across transects will be averaged.
-
-# Initialize the new data frame by the total # of maternal ID's and number of mean-centered variables across (there should always be 7 variables + 1 maternal ID)
 Recipients <- c(ACTransect1$Recipient, ACTransect2$Recipient, ACTransect3$Recipient, ACTransect4$Recipient, ACTransect5$Recipient, ACTransect6$Recipient, ACTransect7$Recipient, ACTransect8$Recipient, ACTransect9$Recipient)
+
+# Now, modify this vector so that eACh recipient occurs only once
 
 Recipients <- unique(Recipients) # Names of maternal ID's, without repetition (n=107)
 
 str(Recipients)
 length(Recipients)
 
-# Create a vector that includes only the variables that we want in the final unified dataframe that contains the data for all of the transects.  We're going to include the raw, untransformed values for each trait and the mean-centered values (some of which are based on log-transformed values)
+# Create a vector that includes ONLY the variables that we want in the final unified dataframe that contains the data for all of the transects.  We're going to include the raw, untransformed values for eACh trait and the mean-centered values (some of which are based on log-transformed values)
 
-Variables <- c("Population", "Field_Year", "Generation", "Block", "Transect", "Sequence", "Plant_ID", "Donor", "Recipient", "FFD", "LFD", "Total_Fruits", "Mean_Ind_Seed_Mass_mg", "Mean_Seeds_per_Fruit", "Lifetime_Fecundity", "Stem_Biomass", "Corolla_Diameter", "Corolla_Area", "Leaf_Area_mm2", "Flowering_Duration", "Log_Total_Fruits", "Log_Mean_Seeds_per_Fruit", "Log_Lifetime_Fecundity", "Log_Stem_Biomass", "Log_Total_Fruits_MC", "Mean_Ind_Seed_Mass_mg_MC", "Log_Mean_Seeds_per_Fruit_MC", "Log_Lifetime_Fecundity_MC", "Log_Stem_Biomass_MC", "Corolla_Diameter_MC", "Corolla_Area_MC", "Log_Leaf_Area_mm2_MC", "Flowering_Duration_MC")
+Variables <- c("Population", "Field_Year", "Generation", "Block", "Transect", "Sequence", "Plant_ID", "Donor", "Recipient", "FFD", "LFD", "Total_Fruits", "Mean_Ind_Seed_Mass_mg", "Mean_Seeds_per_Fruit", "Lifetime_Fecundity", "Stem_Biomass", "Corolla_Diameter", "Corolla_Area", "Leaf_Area_mm2", "Flowering_Duration", "Log_Total_Fruits", "Log_Mean_Seeds_per_Fruit", "Log_Lifetime_Fecundity", "Log_Stem_Biomass", "Log_Total_Fruits_MC", "Mean_Ind_Seed_Mass_mg_MC", "Log_Mean_Seeds_per_Fruit_MC", "Log_Lifetime_Fecundity_MC", "Log_Stem_Biomass_MC", "Corolla_Diameter_MC", "Corolla_Area_MC", "Log_Leaf_Area_mm2_MC", "FFD_MC", "LFD_MC", "Flowering_Duration_MC")
 
-# Combine transects back together to get mean-centered population data for easy averaging of same maternal IDs
+# Combine transects to get mean-centered population data for easy averaging of same maternal IDs
 
-AC_MC_Population <- rbind(ACTransect1,ACTransect2,ACTransect3,ACTransect4,ACTransect5,ACTransect6,ACTransect7,ACTransect8, ACTransect9)
+AC_MeanCentered_AllTransects <- rbind(ACTransect1,ACTransect2,ACTransect3,ACTransect4,ACTransect5,ACTransect6,ACTransect7,ACTransect8, ACTransect9) # This contains 41 variables
 
-AC_MC_Population <- AC_MC_Population[Variables] # Includes only the variables in the "Variables" vector.
+AC_MeanCentered_AllTransects <- AC_MeanCentered_AllTransects[Variables] # Includes only the variables in the "Variables" vector = 35 variables
 
-# This summarizes the data, using the means of the rows representing a given recipient (= Maternal ID) and averaging each maternal ID's values while ignoring NA values. For recipients for which a trait has  values that are ALL NA, this will return a "NaN" for that recipient and trait.
+# Now, let's summarize the data, using the means of the rows representing a given recipient (= Maternal ID) and averaging eACh maternal ID's values while ignoring NA values. For recipients for which a trait has  values that are ALL NA, this will return a "NaN" for that recipient and trait.
 
 # this code creates a new data frame with the MEAN VALUES for EACH RECIPIENT and TRAIT
 
-# In other words, these are the means for the mean-centered trait values of each maternal genotype
+# In other words, these are the means for the mean-centered trait values of eACh maternal genotype
 
-AC_Avg_MC_Population <- AC_MC_Population %>%
+AC_Avg_MC_Population_ByRecip <- AC_MeanCentered_AllTransects %>%
   group_by(Recipient) %>% #uses the list of unique recipients, without repeated values
   summarise(AMC_Log_Stem_Biomass = mean(Log_Stem_Biomass_MC, na.rm=TRUE), 
             AMC_Corolla_Diameter = mean(Corolla_Diameter_MC, na.rm=TRUE), 
@@ -1005,23 +734,12 @@ AC_Avg_MC_Population <- AC_MC_Population %>%
             AMC_Log_Mean_Seeds_per_Fruit = mean(Log_Mean_Seeds_per_Fruit_MC, na.rm=TRUE),
             AMC_Mean_Ind_Seed_Mass_mg = mean(Mean_Ind_Seed_Mass_mg_MC, na.rm=TRUE),
             AMC_Log_Leaf_Area_mm2 = mean(Log_Leaf_Area_mm2_MC, na.rm=TRUE),
-            Mean_FFD = mean(FFD, na.rm=TRUE), #not mean-centered
-            Mean_LFD = mean(LFD, na.rm=TRUE), #not mean-centered
+            AMC_FFD = mean(FFD_MC, na.rm=TRUE), 
+            AMC_LFD = mean(LFD_MC, na.rm=TRUE),
             AMC_Flowering_Duration = mean(Flowering_Duration_MC, na.rm=TRUE))
 
-View(AC_Avg_MC_Population)
+View(AC_Avg_MC_Population_ByRecip)
 
-```
-
-
-
-# EXERCISE:  Use the code above to write new code to create a data frame with the mean values of each mean-centered trait for each PATERNAL (donor) GENOTYPE
-
-```{r}
-
-# For paternal ID's across multiple Transects, take the average of their values. Use a for loop to create a new data frame called "Combined Transects" that combines all the transects' data together. Paternal ID's that are shared across transects will be averaged.
-
-# Initialize the new data frame by the total # of maternal ID's and number of mean-centered variables across (there should always be 7 variables + 1 maternal ID)
 Donors <- c(ACTransect1$Donor, ACTransect2$Donor, ACTransect3$Donor, ACTransect4$Donor, ACTransect5$Donor, ACTransect6$Donor, ACTransect7$Donor, ACTransect8$Donor, ACTransect9$Donor)
 
 Donors <- unique(Donors) # Names of Paternal ID's, without repetition (n=40)
@@ -1029,21 +747,21 @@ Donors <- unique(Donors) # Names of Paternal ID's, without repetition (n=40)
 str(Donors)
 length(Donors)
 
-# Create a vector that includes only the variables that we want in the final unified dataframe that contains the data for all of the transects.  We're going to include the raw, untransformed values for each trait and the mean-centered values (some of which are based on log-transformed values)
+# Create a vector that includes only the variables that we want in the final unified dataframe that contains the data for all of the transects.  We're going to include the raw, untransformed values for eACh trait and the mean-centered values (some of which are based on log-transformed values)
 
 Variables <- c("Population", "Field_Year", "Generation", "Block", "Transect", "Sequence", "Plant_ID", "Donor", "Recipient", "FFD", "LFD", "Total_Fruits", "Mean_Ind_Seed_Mass_mg", "Mean_Seeds_per_Fruit", "Lifetime_Fecundity", "Stem_Biomass", "Corolla_Diameter", "Corolla_Area", "Leaf_Area_mm2", "Flowering_Duration", "Log_Total_Fruits", "Log_Mean_Seeds_per_Fruit", "Log_Lifetime_Fecundity", "Log_Stem_Biomass", "Log_Total_Fruits_MC", "Mean_Ind_Seed_Mass_mg_MC", "Log_Mean_Seeds_per_Fruit_MC", "Log_Lifetime_Fecundity_MC", "Log_Stem_Biomass_MC", "Corolla_Diameter_MC", "Corolla_Area_MC", "Log_Leaf_Area_mm2_MC", "Flowering_Duration_MC")
 
-# Combine transects back together to get mean-centered population data for easy averaging of same paternal IDs
+# Combine transects bACk together to get mean-centered population data for easy averaging of same paternal IDs
 
 AC_MC_Population <- rbind(ACTransect1,ACTransect2,ACTransect3,ACTransect4,ACTransect5,ACTransect6,ACTransect7,ACTransect8, ACTransect9)
 
 AC_MC_Population <- AC_MC_Population[Variables] # Includes only the variables in the "Variables" vector.
 
-# This summarizes the data, using the means of the rows representing a given recipient (= Maternal ID) and averaging each maternal ID's values while ignoring NA values. For recipients for which a trait has  values that are ALL NA, this will return a "NaN" for that recipient and trait.
+# This summarizes the data, using the means of the rows representing a given recipient (= Maternal ID) and averaging eACh maternal ID's values while ignoring NA values. For recipients for which a trait has  values that are ALL NA, this will return a "NaN" for that recipient and trait.
 
 # this code creates a new data frame with the MEAN VALUES for EACH RECIPIENT and TRAIT
 
-# In other words, these are the means for the mean-centered trait values of each maternal genotype
+# In other words, these are the means for the mean-centered trait values of eACh maternal genotype
 
 AC_Avg_MC_Population_ByDonor <- AC_MC_Population %>%
   group_by(Donor) %>% #uses the list of unique recipients, without repeated values
@@ -1060,80 +778,15 @@ AC_Avg_MC_Population_ByDonor <- AC_MC_Population %>%
             AMC_Flowering_Duration = mean(Flowering_Duration_MC, na.rm=TRUE))
 
 View(AC_Avg_MC_Population_ByDonor)
-
-```
-
-
-```{r}
-# Let's observe the frequency distributions of the maternal genotype means AND of the paternal genotype means 
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Log_Stem_Biomass)) +
-  geom_histogram(bins=15)
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Log_Stem_Biomass)) +
-  geom_histogram(bins=15)
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Corolla_Diameter)) +
-  geom_histogram(bins=15)
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Corolla_Diameter)) +
-  geom_histogram(bins=15)
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Corolla_Area)) +
-  geom_histogram(bins=15)
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Corolla_Area)) +
-  geom_histogram(bins=15)
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Log_Lifetime_Fecundity)) +
-  geom_histogram(bins=15)
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Log_Lifetime_Fecundity)) +
-  geom_histogram(bins=15)
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Log_Total_Fruits)) +
-  geom_histogram(bins=15)
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Log_Total_Fruits)) +
-  geom_histogram(bins=15)
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Log_Mean_Seeds_per_Fruit)) +
-  geom_histogram(bins=15)
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Log_Mean_Seeds_per_Fruit)) +
-  geom_histogram(bins=15)
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Mean_Ind_Seed_Mass_mg)) +
-  geom_histogram(bins=15)
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Mean_Ind_Seed_Mass_mg)) +
-  geom_histogram(bins=15)
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Log_Leaf_Area_mm2)) +
-  geom_histogram(bins=15)
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Log_Leaf_Area_mm2)) +
-  geom_histogram(bins=15)
-
-ggplot(AC_Avg_MC_Population, aes(Mean_FFD)) +
-  geom_histogram(bins=15)
-ggplot(AC_Avg_MC_Population_ByDonor, aes(Mean_FFD)) +
-  geom_histogram(bins=15)
-
-ggplot(AC_Avg_MC_Population, aes(Mean_LFD)) +
-  geom_histogram(bins=15)
-ggplot(AC_Avg_MC_Population_ByDonor, aes(Mean_LFD)) +
-  geom_histogram(bins=15)
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Flowering_Duration)) +
-  geom_histogram(bins=15)
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Flowering_Duration)) +
-  geom_histogram(bins=15)
-
-
-
-
 ```
 
 ```{r}
 # Deal with NaN values, replacing NaN with "NA"
 
-for(i in 1:nrow(AC_Avg_MC_Population)){
-  for(j in 1:ncol(AC_Avg_MC_Population)){
-    if(AC_Avg_MC_Population[i,j] == "NaN"){
-      AC_Avg_MC_Population[i,j] <- NA
+for(i in 1:nrow(AC_Avg_MC_Population_ByRecip)){
+  for(j in 1:ncol(AC_Avg_MC_Population_ByRecip)){
+    if(AC_Avg_MC_Population_ByRecip[i,j] == "NaN"){
+      AC_Avg_MC_Population_ByRecip[i,j] <- NA
     }
   }
 }
@@ -1145,386 +798,6 @@ for(i in 1:nrow(AC_Avg_MC_Population_ByDonor)){
     }
   }
 }
-
-
-```
-
-# Stop here November 2, 2023
-########################################################################################
-########################## END OF DATA PREPARATION ##################################### 
-########################################################################################
-
-########################################################################################
-####################### BEGINNING OF ANALYSIS PORTION ################################## 
-########################################################################################
-
-```{r}
-# Let's initialize some variables so we don't have to constantly refer to the entire data set, and let's also do some environment cleanup
-
-# remove("i", "j","Block1", "Block2", "Block3", "z_scores", "MC_Population", "Variables", "center_scale")
-
-# Log-transformed, Average, Mean-Centered value
-
-# LAMC_Stem_biomass <- Avg_MC_Population$LAMC_Stem_biomass
-# AMC_Corola_Diameter <- Avg_MC_Population$AMC_CoroD
-# AMC_Corolla_Area <- Avg_MC_Population$AMC_CoroA
-
-# LAMC_lifetime_fecundity <- Avg_MC_Population$LAMC_lifetime_fecundity
-# LAMC_total_fruit_prod <- Avg_MC_Population$LAMC_total_fruit_prod
-# AMC_meanSPF <- Avg_MC_Population$AMC_meanSPF
-
-```
-
-```{r}
-# Correlation between corolla measurements
-
-# Does Corolla Diameter predict Corolla Area among MATERNAL families?
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Corolla_Diameter, AMC_Corolla_Area)) +
-  geom_point() +
-  geom_smooth(method=lm) +
-  xlab("Corolla Diameter (mm)") + 
-  ylab("Corolla Area (mm^2)")
-
-Area_vs_Diameter <- lm(AMC_Corolla_Area ~ AMC_Corolla_Diameter, AC_Avg_MC_Population)
-A <-summary(Area_vs_Diameter) #make object using lm(linear model) y is function of x = y~x. Asking whether x predicts y. Known as bi-variate regression (1 x varibale and 1 y variable). Dataframe comes last. ##
-
-# Does Corolla Diameter predict Corolla Area among PATERNAL families?
-
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Corolla_Diameter, AMC_Corolla_Area)) +
-  geom_point() +
-  geom_smooth(method=lm) +
-  xlab("Corolla Diameter (mm)") + 
-  ylab("Corolla Area (mm^2)")
-
-Area_vs_Diameter_ByDonor <- lm(AMC_Corolla_Area ~ AMC_Corolla_Diameter, AC_Avg_MC_Population_ByDonor)
-B <- summary(Area_vs_Diameter_ByDonor)
-
-
-A
-B
-
-
-#PVALUE=  s
-###R2 value= % that is the dependent variable is explained by the independent variable
-###########################
-
-# Does Total Fruit Production predict Lifetime Fecundity (total seed production) among MATERNAL families?
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Log_Total_Fruits, AMC_Log_Lifetime_Fecundity)) +
-  geom_point() +
-  geom_smooth(method=lm) +
-  xlab("Total Fruit Production (Open and Closed)") + 
-  ylab("Lifetime Fecundity")
-
-Fecundity_vs_Total_Fruits <- lm(AMC_Log_Lifetime_Fecundity~AMC_Log_Total_Fruits, AC_Avg_MC_Population)
-summary(Fecundity_vs_Total_Fruits)
-
-# Does Total Fruit Production predict Lifetime Fecundity (total seed production) among PATERNAL families?
-
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Log_Total_Fruits, AMC_Log_Lifetime_Fecundity)) +
-  geom_point() +
-  geom_smooth(method=lm) +
-  xlab("Total Fruit Production (Open and Closed)") + 
-  ylab("Lifetime Fecundity")
-
-Fecundity_vs_Total_Fruits_ByDonor <- lm(AMC_Log_Lifetime_Fecundity~AMC_Log_Total_Fruits, AC_Avg_MC_Population_ByDonor)
-summary(Fecundity_vs_Total_Fruits_ByDonor)
-
-
-
-###########################
-
-
-
-# Does Flowering Duration predict Lifetime Fecundity among MATERNAL families?
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Flowering_Duration, AMC_Log_Lifetime_Fecundity)) +
-  geom_point() +
-  geom_smooth(method=lm) +
-  xlab("Flowering Duration") + 
-  ylab("Lifetime Fecundity")
-
-Fecundity_vs_Flowering_Duration <- lm(AMC_Log_Lifetime_Fecundity~AMC_Flowering_Duration, AC_Avg_MC_Population)
-summary(Fecundity_vs_Flowering_Duration)
-
-
-# Does Flowering Duration predict Lifetime Fecundity among PATERNAL families?
-
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Flowering_Duration, AMC_Log_Lifetime_Fecundity)) +
-  geom_point() +
-  geom_smooth(method=lm) +
-  xlab("Flowering Duration") + 
-  ylab("Lifetime Fecundity")
-
-Fecundity_vs_Flowering_Duration_byDonor <- lm(AMC_Log_Lifetime_Fecundity~AMC_Flowering_Duration, AC_Avg_MC_Population_ByDonor)
-summary(Fecundity_vs_Flowering_Duration_byDonor)
-
-
-
-###########################
-
-# Is there a genetically based trade-off between Mean Individual Seed Mass and Mean Seeds per Fruit among MATERNAL families?
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Log_Mean_Seeds_per_Fruit, AMC_Mean_Ind_Seed_Mass_mg)) +
-  geom_point() +
-  geom_smooth(method=lm) +
-  xlab("Log(Mean Number of Seeds per Fruit)") + 
-  ylab("Mean Individual Seed Mass (mg)")
-
-Mean_Seed_Mass_vs_Mean_Seed_Number <- lm(AMC_Mean_Ind_Seed_Mass_mg~AMC_Log_Mean_Seeds_per_Fruit, AC_Avg_MC_Population)
-summary(Mean_Seed_Mass_vs_Mean_Seed_Number)
-
-# Is there a genetically based trade-off between Mean Individual Seed Mass and Mean Seeds per Fruit among PATERNAL families?
-
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Log_Mean_Seeds_per_Fruit, AMC_Mean_Ind_Seed_Mass_mg)) +
-  geom_point() +
-  geom_smooth(method=lm) +
-  xlab("Log(Mean Number of Seeds per Fruit)") + 
-  ylab("Mean Individual Seed Mass (mg)")
-
-Mean_Seed_Mass_vs_Mean_Seed_Number_ByDonor <- lm(AMC_Mean_Ind_Seed_Mass_mg~AMC_Log_Mean_Seeds_per_Fruit, AC_Avg_MC_Population_ByDonor)
-summary(Mean_Seed_Mass_vs_Mean_Seed_Number_ByDonor)
-
-
-```
-
-```{r}
-# Simple linear regression of corolla size against stem biomass
-
-names(AC_Avg_MC_Population)
-
-# Regression among MATERNAL family means
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Log_Stem_Biomass, AMC_Corolla_Area)) +
-  geom_point() +
-  geom_smooth(method='lm') +
-  xlab("Log (Stem Biomass)") +
-  ylab("Corolla Area (mm^2)")
-
-Corolla_Area_vs_Stem_Biomass <- lm(AMC_Corolla_Area~AMC_Log_Stem_Biomass, AC_Avg_MC_Population)
-
-summary(Corolla_Area_vs_Stem_Biomass)
-
-
-# Regression among PATERNAL family means
-
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Log_Stem_Biomass, AMC_Corolla_Area)) +
-  geom_point() +
-  geom_smooth(method='lm') +
-  xlab("Log (Stem Biomass)") +
-  ylab("Corolla Area (mm^2)")
-
-Corolla_Area_vs_Stem_Biomass_ByDonor <- lm(AMC_Corolla_Area~AMC_Log_Stem_Biomass, AC_Avg_MC_Population_ByDonor)
-
-summary(Corolla_Area_vs_Stem_Biomass_ByDonor)
-
-
-
-```
-
-
-
-```{r}
-# Simple linear regression of Stem biomass data against each measure of reproductive fitness, based on MATERNAL means
-
-names(AC_Avg_MC_Population)
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Log_Stem_Biomass, AMC_Log_Lifetime_Fecundity)) +
-  geom_point() +
-  geom_smooth(method='lm') +
-  xlab("Log(Stem Biomass)") +
-  ylab("Log(Lifetime Fecundity)") 
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Log_Stem_Biomass, AMC_Log_Total_Fruits)) +
-  geom_point() +
-  geom_smooth(method='lm') +
-  xlab("Log(Stem Biomass)") +
-  ylab("Log(Total Fruit Production)") 
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Log_Stem_Biomass, AMC_Log_Mean_Seeds_per_Fruit)) +
-  geom_point() +
-  geom_smooth(method='lm') + 
-  xlab("Log(Stem Biomass)") +
-  ylab("Log(Mean Seeds per Fruit)") 
-
-StemModel1 <- lm(AMC_Log_Lifetime_Fecundity~AMC_Log_Stem_Biomass, AC_Avg_MC_Population)
-StemModel2 <- lm(AMC_Log_Total_Fruits~AMC_Log_Stem_Biomass, AC_Avg_MC_Population)
-StemModel3 <- lm(AMC_Log_Mean_Seeds_per_Fruit~AMC_Log_Stem_Biomass, AC_Avg_MC_Population)
-
-a <-summary(StemModel1)
-b <- summary(StemModel2)
-c <- summary(StemModel3)
-
-a
-b
-c
-
-# Simple linear regression of Stem biomass data against each measure of reproductive fitness, based on PATERNAL means
-
-names(AC_Avg_MC_Population_ByDonor)
-
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Log_Stem_Biomass, AMC_Log_Lifetime_Fecundity)) +
-  geom_point() +
-  geom_smooth(method='lm') +
-  xlab("Log(Stem Biomass)") +
-  ylab("Log(Lifetime Fecundity)") 
-
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Log_Stem_Biomass, AMC_Log_Total_Fruits)) +
-  geom_point() +
-  geom_smooth(method='lm') +
-  xlab("Log(Stem Biomass)") +
-  ylab("Log(Total Fruit Production)") 
-
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Log_Stem_Biomass, AMC_Log_Mean_Seeds_per_Fruit)) +
-  geom_point() +
-  geom_smooth(method='lm') + 
-  xlab("Log(Stem Biomass)") +
-  ylab("Log(Mean Seeds per Fruit)") 
-
-StemModel1_ByDonor <- lm(AMC_Log_Lifetime_Fecundity~AMC_Log_Stem_Biomass, AC_Avg_MC_Population_ByDonor)
-StemModel2_ByDonor <- lm(AMC_Log_Total_Fruits~AMC_Log_Stem_Biomass, AC_Avg_MC_Population_ByDonor)
-StemModel3_ByDonor <- lm(AMC_Log_Mean_Seeds_per_Fruit~AMC_Log_Stem_Biomass, AC_Avg_MC_Population_ByDonor)
-
-d <- summary(StemModel1_ByDonor)
-e <- summary(StemModel2_ByDonor)
-f <- summary(StemModel3_ByDonor)
-
-a
-b
-c
-d
-e
-f
-
-```
-
-```{r}
-# Simple linear regression of corolla area vs each measure of reproductive fitness by MATERNAL family
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Corolla_Diameter, AMC_Log_Lifetime_Fecundity)) +
-  geom_point() +
-  geom_smooth(method='lm') +
-  xlab("Corolla Area") +
-  ylab("Log(Lifetime Fecundity)") 
-
-
-ggplot(AC_Avg_MC_Population,aes(AMC_Corolla_Diameter, AMC_Log_Total_Fruits)) +
-  geom_point() +
-  geom_smooth(method='lm') +
-  xlab("AMC Corolla Area") +
-  ylab("Log(Total Fruit Production)") 
-
-
-ggplot(AC_Avg_MC_Population, aes(AMC_Corolla_Diameter, AMC_Log_Mean_Seeds_per_Fruit)) +
-  geom_point() +
-  geom_smooth(method='lm') + 
-  xlab("AMC Corolla Area") +
-  ylab("Log(Mean Seeds per Fruit)") 
-
-
-CoroModel1 <- lm(AMC_Log_Lifetime_Fecundity~AMC_Corolla_Diameter, AC_Avg_MC_Population)
-CoroModel2 <- lm(AMC_Log_Total_Fruits~AMC_Corolla_Diameter, AC_Avg_MC_Population)
-CoroModel3 <- lm(AMC_Log_Mean_Seeds_per_Fruit~AMC_Corolla_Diameter, AC_Avg_MC_Population)
-
-g <- summary(CoroModel1)
-h <- summary(CoroModel2)
-i <- summary(CoroModel3)
-
-# Simple linear regression of corolla area vs each measure of reproductive fitness by PATERNAL family
-
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Corolla_Diameter, AMC_Log_Lifetime_Fecundity)) +
-  geom_point() +
-  geom_smooth(method='lm') +
-  xlab("Corolla Area") +
-  ylab("Log(Lifetime Fecundity)") 
-
-
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Corolla_Diameter, AMC_Log_Total_Fruits)) +
-  geom_point() +
-  geom_smooth(method='lm') +
-  xlab("AMC Corolla Area") +
-  ylab("Log(Total Fruit Production)") 
-
-
-ggplot(AC_Avg_MC_Population_ByDonor, aes(AMC_Corolla_Diameter, AMC_Log_Mean_Seeds_per_Fruit)) +
-  geom_point() +
-  geom_smooth(method='lm') + 
-  xlab("AMC Corolla Area") +
-  ylab("Log(Mean Seeds per Fruit)") 
-
-
-CoroModel1_ByDonor <- lm(AMC_Log_Lifetime_Fecundity~AMC_Corolla_Diameter, AC_Avg_MC_Population_ByDonor)
-CoroModel2_ByDonor <- lm(AMC_Log_Total_Fruits~AMC_Corolla_Diameter, AC_Avg_MC_Population_ByDonor)
-CoroModel3_ByDonor <- lm(AMC_Log_Mean_Seeds_per_Fruit~AMC_Corolla_Diameter, AC_Avg_MC_Population_ByDonor)
-
-j <- summary(CoroModel1_ByDonor)
-k <- summary(CoroModel2_ByDonor)
-l <- summary(CoroModel3_ByDonor)
-
-g
-h
-i
-j
-k
-l
-
-```
-
-
-```{r}
-# Multivariate regression examining the independent effects of Corolla Area and Stem Biomass on components of reproduction using MATERNAL family means
-
-names(AC_Avg_MC_Population)
-
-FullModel1 <- lm(AMC_Log_Lifetime_Fecundity ~ AMC_Corolla_Area + AMC_Log_Stem_Biomass, AC_Avg_MC_Population)
-FullModel2 <- lm(AMC_Log_Total_Fruits ~ AMC_Corolla_Area + AMC_Log_Stem_Biomass, AC_Avg_MC_Population)
-FullModel3 <- lm(AMC_Log_Mean_Seeds_per_Fruit ~ AMC_Corolla_Area + AMC_Log_Stem_Biomass, AC_Avg_MC_Population)
-
-visreg(FullModel1)
-visreg(FullModel2)
-visreg(FullModel3)
-
-m <- summary(FullModel1)
-n <- summary(FullModel2)
-o <- summary(FullModel3)
-
-m
-n
-o
-
-
-
-# Multivariate regression examining the independent effects of Corolla Area and Stem Biomass on components of reproduction using PATERNAL family means
-
-names(AC_Avg_MC_Population)
-
-FullModel1_ByDonor <- lm(AMC_Log_Lifetime_Fecundity ~ AMC_Corolla_Area + AMC_Log_Stem_Biomass, AC_Avg_MC_Population_ByDonor)
-FullModel2_ByDonor <- lm(AMC_Log_Total_Fruits ~ AMC_Corolla_Area + AMC_Log_Stem_Biomass, AC_Avg_MC_Population_ByDonor)
-FullModel3_ByDonor <- lm(AMC_Log_Mean_Seeds_per_Fruit ~ AMC_Corolla_Area + AMC_Log_Stem_Biomass, AC_Avg_MC_Population_ByDonor)
-
-visreg(FullModel1_ByDonor)
-visreg(FullModel2_ByDonor)
-visreg(FullModel3_ByDonor)
-
-p <- summary(FullModel1_ByDonor)
-q <- summary(FullModel2_ByDonor)
-r <- summary(FullModel3_ByDonor)
-
-m
-n
-o
-p
-q
-r
-
-
-
-```
-```{r}
-
-
-
 
 
 ```
