@@ -1,0 +1,26 @@
+---
+title: "DataFromOtherCodeBB"
+output: html_document
+date: "2023-11-21"
+---
+
+```{r}
+install.packages("jtools")
+install.packages("lme4")
+install.packages("lmerTest")
+
+library(Matrix)
+library(dplyr)
+library(ggplot2)
+library(jtools)
+library(lme4)
+library(lmerTest)
+library(lubridate)
+library(readr)
+library(tidyverse)
+library(visreg)
+
+BB_Data_2022 <- read_csv("~/MazerResearchProject/Data/BB_Data_2022.csv")
+view(BB_Data_2022)
+```
+

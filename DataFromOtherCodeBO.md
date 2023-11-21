@@ -21,10 +21,10 @@ BO_Data_2022 <- read_csv("~/MazerResearchProject/Data/BO_Data_2022.csv")
 
 ```
 ## Rows: 349 Columns: 23
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────────────────────
 ## Delimiter: ","
 ## chr  (6): Population, Generation, Donor, Recipient, FFD, LFD
-## dbl (16): Field_Year, Block, Transect, Sequence, Plant_ID, Total_Closed_Fruits, Total_Fruits, Tot_Seed_Num_Clo...
+## dbl (16): Field_Year, Block, Transect, Sequence, Plant_ID, Total_Closed_Fruits, Total_Fruits...
 ## lgl  (1): Left_Or_Right
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
@@ -39,16 +39,18 @@ BO_Data_2022$Flowering_Duration - BO_Data_2022$fl_duration
 ```
 
 ```
-##   [1]  0  0  0  0  0  0  0  0  0 NA  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-##  [37]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-##  [73]  0  0  0  0  0  0  0  0  0  0  0  0  0  0 NA  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-## [109]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-## [145]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-## [181]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-## [217]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-## [253]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-## [289]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-## [325] NA  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+##   [1]  0  0  0  0  0  0  0  0  0 NA  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+##  [31]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+##  [61]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 NA  0  0  0
+##  [91]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [121]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [151]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [181]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [211]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [241]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [271]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [301]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 NA  0  0  0  0  0
+## [331]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
 ```
 
 ```r
@@ -103,7 +105,9 @@ BOTransect6 <- subset(BO_Data_2022, Transect == 6)
 BOTransect7 <- subset(BO_Data_2022, Transect == 7)
 BOTransect8 <- subset(BO_Data_2022, Transect == 8)
 BOTransect9 <- subset(BO_Data_2022, Transect == 9)
-
+BOTransect10 <- subset(BO_Data_2022, Transect == 10)
+BOTransect11 <- subset(BO_Data_2022, Transect == 11)
+BOTransect12 <- subset(BO_Data_2022, Transect == 12)
 
 center_scale <- function(x) {
   scale(x, scale = FALSE)
@@ -174,8 +178,8 @@ print(BOTransect1$Sequence)
 ```
 
 ```
-##  [1]  1  2  3  4  5  6  7  9 10 11 12 13 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 37 38 40 42
-## [37] 44
+##  [1]  1  2  3  4  5  6  7  9 10 11 12 13 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33
+## [31] 34 35 37 38 40 42 44
 ```
 
 ```r
@@ -270,14 +274,16 @@ names(BOTransect3)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
-##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
-##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"    "Mean_Ind_Seed_Mass_mg"   
-## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
-## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
-## [29] "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -325,14 +331,16 @@ names(BOTransect4)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
-##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
-##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"    "Mean_Ind_Seed_Mass_mg"   
-## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
-## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
-## [29] "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -380,14 +388,16 @@ names(BOTransect5)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
-##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
-##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"    "Mean_Ind_Seed_Mass_mg"   
-## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
-## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
-## [29] "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -436,14 +446,16 @@ names(BOTransect6)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
-##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
-##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"    "Mean_Ind_Seed_Mass_mg"   
-## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
-## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
-## [29] "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -491,14 +503,16 @@ names(BOTransect7)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
-##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
-##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"    "Mean_Ind_Seed_Mass_mg"   
-## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
-## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
-## [29] "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -548,14 +562,16 @@ names(BOTransect8)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
-##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
-##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"    "Mean_Ind_Seed_Mass_mg"   
-## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
-## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
-## [29] "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -605,37 +621,209 @@ names(BOTransect9)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
-##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
-##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"    "Mean_Ind_Seed_Mass_mg"   
-## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
-## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
-## [29] "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+```
+
+```r
+####
+PopulationV10 <- BOTransect10$Population # Creates a vector of Population as charBOter variables
+Field_YearV10 <- BOTransect10$Field_Year
+GenerationV10 <- BOTransect10$Generation
+BlockV10 <- BOTransect10$Block
+TransectV10 <- BOTransect10$Transect
+SequenceV10 <- BOTransect10$Sequence
+DonorV10 <- BOTransect10$Donor
+RecipientV10 <- BOTransect10$Recipient
+FFDV10 <- BOTransect10$FFD
+LFDV10 <- BOTransect10$LFD
+
+
+# Remove values of these variables in BOTransect9 (the data frame that contains the variables for which we want to get rid of the outliers)
+BOTransect10$Population <-NULL
+BOTransect10$Field_Year <- NULL
+BOTransect10$Generation <- NULL
+BOTransect10$Block <- NULL
+BOTransect10$Transect <- NULL
+BOTransect10$Sequence <- NULL
+BOTransect10$Donor <- NULL
+BOTransect10$Recipient <- NULL
+BOTransect10$FFD <- NULL
+BOTransect10$LFD <- NULL
+
+
+
+# z-scores are calculated and the for loop goes tBOough eBOh element of the z-score array, looking for values above 9 which implies the value is an outlier and removes that index from the original BOTransect9 data frame
+z_scores <- as.data.frame(sapply(BOTransect10, function(BOTransect10) (abs(BOTransect10-mean(BOTransect10, na.rm = TRUE))/sd(BOTransect10, na.rm = TRUE))))
+for(i in 1:nrow(z_scores)){
+  for(j in 1:ncol(z_scores)){
+    if(is.na(z_scores[i,j])){
+      BOTransect10[i,j] = NA
+    }
+      else if(z_scores[i,j] > 3){
+      BOTransect10[i,j] = NA
+      }
+    }
+  }
+
+BOTransect10 <- BOTransect10 %>% mutate(Population = PopulationV10 , Field_Year = Field_YearV10, Generation = GenerationV10, Block = BlockV10, Transect = TransectV10, Sequence = SequenceV10, Donor = DonorV10, Recipient = RecipientV10, FFD = FFDV10, LFD = LFDV10, .before = Left_Or_Right)
+
+
+names(BOTransect10)
+```
+
+```
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+```
+
+```r
+#########################################
+PopulationV11<- BOTransect11$Population 
+Field_YearV11<- BOTransect11$Field_Year
+GenerationV11<- BOTransect11$Generation
+BlockV11<- BOTransect11$Block
+TransectV11<- BOTransect11$Transect
+SequenceV11<- BOTransect11$Sequence
+DonorV11<- BOTransect11$Donor
+RecipientV11<- BOTransect11$Recipient
+FFDV11<- BOTransect11$FFD
+LFDV11<- BOTransect11$LFD
+
+BOTransect11$Population <-NULL
+BOTransect11$Field_Year <- NULL
+BOTransect11$Generation <- NULL
+BOTransect11$Block <- NULL
+BOTransect11$Transect <- NULL
+BOTransect11$Sequence <- NULL
+BOTransect11$Donor <- NULL
+BOTransect11$Recipient <- NULL
+BOTransect11$FFD <- NULL
+BOTransect11$LFD <- NULL
+
+
+z_scores <- as.data.frame(sapply(BOTransect11, function(BOTransect11) (abs(BOTransect11-mean(BOTransect11, na.rm = TRUE))/sd(BOTransect11, na.rm = TRUE))))
+for(i in 1:nrow(z_scores)){
+  for(j in 1:ncol(z_scores)){
+    if(is.na(z_scores[i,j])){
+      BOTransect11[i,j] = NA
+    }
+      else if(z_scores[i,j] > 3){
+      BOTransect11[i,j] = NA
+      }
+    }
+  }
+
+BOTransect11<- BOTransect11%>% mutate(Population = PopulationV11, Field_Year = Field_YearV11, Generation = GenerationV11, Block = BlockV11, Transect = TransectV11, Sequence = SequenceV11, Donor = DonorV11, Recipient = RecipientV11, FFD = FFDV11, LFD = LFDV11, .before = Left_Or_Right)
+
+
+names(BOTransect11)
+```
+
+```
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+```
+
+```r
+#########################################
+PopulationV12<- BOTransect12$Population 
+Field_YearV12<- BOTransect12$Field_Year
+GenerationV12<- BOTransect12$Generation
+BlockV12<- BOTransect12$Block
+TransectV12<- BOTransect12$Transect
+SequenceV12<- BOTransect12$Sequence
+DonorV12<- BOTransect12$Donor
+RecipientV12<- BOTransect12$Recipient
+FFDV12<- BOTransect12$FFD
+LFDV12<- BOTransect12$LFD
+
+BOTransect12$Population <-NULL
+BOTransect12$Field_Year <- NULL
+BOTransect12$Generation <- NULL
+BOTransect12$Block <- NULL
+BOTransect12$Transect <- NULL
+BOTransect12$Sequence <- NULL
+BOTransect12$Donor <- NULL
+BOTransect12$Recipient <- NULL
+BOTransect12$FFD <- NULL
+BOTransect12$LFD <- NULL
+
+
+z_scores <- as.data.frame(sapply(BOTransect12, function(BOTransect12) (abs(BOTransect12-mean(BOTransect12, na.rm = TRUE))/sd(BOTransect12, na.rm = TRUE))))
+for(i in 1:nrow(z_scores)){
+  for(j in 1:ncol(z_scores)){
+    if(is.na(z_scores[i,j])){
+      BOTransect12[i,j] = NA
+    }
+      else if(z_scores[i,j] > 3){
+      BOTransect12[i,j] = NA
+      }
+    }
+  }
+
+BOTransect12<- BOTransect12%>% mutate(Population = PopulationV12, Field_Year = Field_YearV12, Generation = GenerationV12, Block = BlockV12, Transect = TransectV12, Sequence = SequenceV12, Donor = DonorV12, Recipient = RecipientV12, FFD = FFDV12, LFD = LFDV12, .before = Left_Or_Right)
+
+
+names(BOTransect12)
+```
+
+```
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
 ```
 
 
 ```r
-# Mean-centering the data frame for Transect 1
-
 names(BOTransect1)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
-##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
-##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"    "Mean_Ind_Seed_Mass_mg"   
-## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
-## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
-## [29] "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
 ```
 
 ```r
-# MC = mean-centered
-
 BOTransect1 <- BOTransect1 %>% mutate(
   Total_Closed_Fruits_MC = center_scale(Total_Closed_Fruits),
   Log_Total_Fruits_MC = center_scale(Log_Total_Fruits),
@@ -652,7 +840,6 @@ BOTransect1 <- BOTransect1 %>% mutate(
 
 View(BOTransect1)
 
-# Check the mean, min, and max for one of the variables to make sure that they make sense.  Must add "na.rm=TRUE".
 
 mean(BOTransect1$Total_Closed_Fruits, na.rm=TRUE)
 ```
@@ -1216,9 +1403,110 @@ max(BOTransect9$Total_Closed_Fruits_MC, na.rm=TRUE)
 ## [1] 3.407407
 ```
 
+```r
+names(BOTransect10)
+```
+
+```
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+```
 
 ```r
-Recipients <- c(BOTransect1$Recipient, BOTransect2$Recipient, BOTransect3$Recipient, BOTransect4$Recipient, BOTransect5$Recipient, BOTransect6$Recipient, BOTransect7$Recipient, BOTransect8$Recipient, BOTransect9$Recipient)
+BOTransect10 <- BOTransect10 %>% mutate(
+  Total_Closed_Fruits_MC = center_scale(Total_Closed_Fruits),
+  Log_Total_Fruits_MC = center_scale(Log_Total_Fruits),
+  Mean_Ind_Seed_Mass_mg_MC = center_scale(Mean_Ind_Seed_Mass_mg),
+  Log_Mean_Seeds_per_Fruit_MC = center_scale(Log_Mean_Seeds_per_Fruit),
+  Log_Lifetime_Fecundity_MC = center_scale(Log_Lifetime_Fecundity),
+  Log_Stem_Biomass_MC = center_scale(Log_Stem_Biomass),
+  Corolla_Diameter_MC = center_scale(Corolla_Diameter),
+  Corolla_Area_MC = center_scale(Corolla_Area),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
+  Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
+  Flowering_Duration_MC = center_scale(Flowering_Duration))
+
+View(BOTransect10)
+
+names(BOTransect11)
+```
+
+```
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+```
+
+```r
+BOTransect11 <- BOTransect11 %>% mutate(
+  Total_Closed_Fruits_MC = center_scale(Total_Closed_Fruits),
+  Log_Total_Fruits_MC = center_scale(Log_Total_Fruits),
+  Mean_Ind_Seed_Mass_mg_MC = center_scale(Mean_Ind_Seed_Mass_mg),
+  Log_Mean_Seeds_per_Fruit_MC = center_scale(Log_Mean_Seeds_per_Fruit),
+  Log_Lifetime_Fecundity_MC = center_scale(Log_Lifetime_Fecundity),
+  Log_Stem_Biomass_MC = center_scale(Log_Stem_Biomass),
+  Corolla_Diameter_MC = center_scale(Corolla_Diameter),
+  Corolla_Area_MC = center_scale(Corolla_Area),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
+  Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
+  Flowering_Duration_MC = center_scale(Flowering_Duration))
+
+View(BOTransect11)
+
+names(BOTransect12)
+```
+
+```
+##  [1] "Population"               "Field_Year"               "Generation"              
+##  [4] "Block"                    "Transect"                 "Sequence"                
+##  [7] "Donor"                    "Recipient"                "FFD"                     
+## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"   
+## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
+## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
+## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
+## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+```
+
+```r
+BOTransect12 <- BOTransect12 %>% mutate(
+  Total_Closed_Fruits_MC = center_scale(Total_Closed_Fruits),
+  Log_Total_Fruits_MC = center_scale(Log_Total_Fruits),
+  Mean_Ind_Seed_Mass_mg_MC = center_scale(Mean_Ind_Seed_Mass_mg),
+  Log_Mean_Seeds_per_Fruit_MC = center_scale(Log_Mean_Seeds_per_Fruit),
+  Log_Lifetime_Fecundity_MC = center_scale(Log_Lifetime_Fecundity),
+  Log_Stem_Biomass_MC = center_scale(Log_Stem_Biomass),
+  Corolla_Diameter_MC = center_scale(Corolla_Diameter),
+  Corolla_Area_MC = center_scale(Corolla_Area),
+  FFD_MC = center_scale(FFD),
+  LFD_MC = center_scale(LFD),
+  Log_Leaf_Area_mm2_MC = center_scale(Log_Leaf_Area_mm2),
+  Flowering_Duration_MC = center_scale(Flowering_Duration))
+
+View(BOTransect12)
+```
+
+
+```r
+Recipients <- c(BOTransect1$Recipient, BOTransect2$Recipient, BOTransect3$Recipient, BOTransect4$Recipient, BOTransect5$Recipient, BOTransect6$Recipient, BOTransect7$Recipient, BOTransect8$Recipient, BOTransect9$Recipient, BOTransect10$Recipient, BOTransect11$Recipient, BOTransect12$Recipient)
 
 # Now, modify this vector so that eBOh recipient occurs only once
 
@@ -1228,7 +1516,7 @@ str(Recipients)
 ```
 
 ```
-##  chr [1:129] "BO_130" "BO_166" "BO_019" "BO_066" "BO_137" "BO_045" "BO_048" "BO_099" "BO_115" "BO_104" ...
+##  chr [1:131] "BO_130" "BO_166" "BO_019" "BO_066" "BO_137" "BO_045" "BO_048" "BO_099" ...
 ```
 
 ```r
@@ -1236,25 +1524,18 @@ length(Recipients)
 ```
 
 ```
-## [1] 129
+## [1] 131
 ```
 
 ```r
-# Create a vector that includes ONLY the variables that we want in the final unified dataframe that contains the data for all of the transects.  We're going to include the raw, untransformed values for eBOh trait and the mean-centered values (some of which are based on log-transformed values)
-
 Variables <- c("Population", "Field_Year", "Generation", "Block", "Transect", "Sequence", "Plant_ID", "Donor", "Recipient", "FFD", "LFD", "Total_Fruits", "Mean_Ind_Seed_Mass_mg", "Mean_Seeds_per_Fruit", "Lifetime_Fecundity", "Stem_Biomass", "Corolla_Diameter", "Corolla_Area", "Leaf_Area_mm2", "Flowering_Duration", "Log_Total_Fruits", "Log_Mean_Seeds_per_Fruit", "Log_Lifetime_Fecundity", "Log_Stem_Biomass", "Log_Total_Fruits_MC", "Mean_Ind_Seed_Mass_mg_MC", "Log_Mean_Seeds_per_Fruit_MC", "Log_Lifetime_Fecundity_MC", "Log_Stem_Biomass_MC", "Corolla_Diameter_MC", "Corolla_Area_MC", "Log_Leaf_Area_mm2_MC", "FFD_MC", "LFD_MC", "Flowering_Duration_MC")
 
 # Combine transects to get mean-centered population data for easy averaging of same maternal IDs
 
-BO_MeanCentered_AllTransects <- rbind(BOTransect1,BOTransect2,BOTransect3,BOTransect4,BOTransect5,BOTransect6,BOTransect7,BOTransect8, BOTransect9) # This contains 41 variables
+BO_MeanCentered_AllTransects <- rbind(BOTransect1,BOTransect2,BOTransect3,BOTransect4,BOTransect5,BOTransect6,BOTransect7,BOTransect8, BOTransect9, BOTransect10, BOTransect11, BOTransect12) # This contains 41 variables
 
-BO_MeanCentered_AllTransects <- BO_MeanCentered_AllTransects[Variables] # Includes only the variables in the "Variables" vector = 35 variables
+BO_MeanCentered_AllTransects <- BO_MeanCentered_AllTransects[Variables]
 
-# Now, let's summarize the data, using the means of the rows representing a given recipient (= Maternal ID) and averaging eBOh maternal ID's values while ignoring NA values. For recipients for which a trait has  values that are ALL NA, this will return a "NaN" for that recipient and trait.
-
-# this code creates a new data frame with the MEAN VALUES for EBOH RECIPIENT and TRAIT
-
-# In other words, these are the means for the mean-centered trait values of eBOh maternal genotype
 
 BO_Avg_MC_Population_ByRecip <- BO_MeanCentered_AllTransects %>%
   group_by(Recipient) %>% #uses the list of unique recipients, without repeated values
@@ -1272,7 +1553,7 @@ BO_Avg_MC_Population_ByRecip <- BO_MeanCentered_AllTransects %>%
 
 View(BO_Avg_MC_Population_ByRecip)
 
-Donors <- c(BOTransect1$Donor, BOTransect2$Donor, BOTransect3$Donor, BOTransect4$Donor, BOTransect5$Donor, BOTransect6$Donor, BOTransect7$Donor, BOTransect8$Donor, BOTransect9$Donor)
+Donors <- c(BOTransect1$Donor, BOTransect2$Donor, BOTransect3$Donor, BOTransect4$Donor, BOTransect5$Donor, BOTransect6$Donor, BOTransect7$Donor, BOTransect8$Donor, BOTransect9$Donor, BOTransect10$Donor, BOTransect11$Donor, BOTransect12$Donor)
 
 Donors <- unique(Donors) # Names of Paternal ID's, without repetition (n=40)
 
@@ -1280,7 +1561,7 @@ str(Donors)
 ```
 
 ```
-##  chr [1:44] "BO_201" "BO_192" "BO_005" "BO_070" "BO_038" "BO_170" "BO_001" "BO_033" "BO_065" "BO_106" ...
+##  chr [1:44] "BO_201" "BO_192" "BO_005" "BO_070" "BO_038" "BO_170" "BO_001" "BO_033" ...
 ```
 
 ```r
@@ -1292,21 +1573,14 @@ length(Donors)
 ```
 
 ```r
-# Create a vector that includes only the variables that we want in the final unified dataframe that contains the data for all of the transects.  We're going to include the raw, untransformed values for eBOh trait and the mean-centered values (some of which are based on log-transformed values)
-
 Variables <- c("Population", "Field_Year", "Generation", "Block", "Transect", "Sequence", "Plant_ID", "Donor", "Recipient", "FFD", "LFD", "Total_Fruits", "Mean_Ind_Seed_Mass_mg", "Mean_Seeds_per_Fruit", "Lifetime_Fecundity", "Stem_Biomass", "Corolla_Diameter", "Corolla_Area", "Leaf_Area_mm2", "Flowering_Duration", "Log_Total_Fruits", "Log_Mean_Seeds_per_Fruit", "Log_Lifetime_Fecundity", "Log_Stem_Biomass", "Log_Total_Fruits_MC", "Mean_Ind_Seed_Mass_mg_MC", "Log_Mean_Seeds_per_Fruit_MC", "Log_Lifetime_Fecundity_MC", "Log_Stem_Biomass_MC", "Corolla_Diameter_MC", "Corolla_Area_MC", "Log_Leaf_Area_mm2_MC", "Flowering_Duration_MC")
 
-# Combine transects bBOk together to get mean-centered population data for easy averaging of same paternal IDs
 
-BO_MC_Population <- rbind(BOTransect1,BOTransect2,BOTransect3,BOTransect4,BOTransect5,BOTransect6,BOTransect7,BOTransect8, BOTransect9)
+
+BO_MC_Population <- rbind(BOTransect1,BOTransect2,BOTransect3,BOTransect4,BOTransect5,BOTransect6,BOTransect7,BOTransect8, BOTransect9, BOTransect10, BOTransect11, BOTransect12)
 
 BO_MC_Population <- BO_MC_Population[Variables] # Includes only the variables in the "Variables" vector.
 
-# This summarizes the data, using the means of the rows representing a given recipient (= Maternal ID) and averaging eBOh maternal ID's values while ignoring NA values. For recipients for which a trait has  values that are ALL NA, this will return a "NaN" for that recipient and trait.
-
-# this code creates a new data frame with the MEAN VALUES for EBOH RECIPIENT and TRAIT
-
-# In other words, these are the means for the mean-centered trait values of eBOh maternal genotype
 
 BO_Avg_MC_Population_ByDonor <- BO_MC_Population %>%
   group_by(Donor) %>% #uses the list of unique recipients, without repeated values
