@@ -3,6 +3,7 @@ title: "Research Project"
 output: html_document
 date: "2023-11-08"
 ---
+
 ```{r}
 library(ggplot2)
 library(dplyr)
@@ -15,6 +16,8 @@ library(Matrix)
 library(lme4)
 print(sessionInfo())
 remotes::install_github("rileytwo/darkstudio")
+darkstudio::activate()
+
 ```
 
 ```{r}
@@ -31,6 +34,7 @@ remotes::install_github("rileytwo/darkstudio")
 
 #AC_Data_2022 <- AC_Data_2022 %>% mutate (Log_Stem_Biomass = log(Stem_Biomass))
 ```
+
 ```{r}
 #Separate transects#
 
@@ -102,7 +106,6 @@ ACTransect1 <- ACTransect1 %>%
 View(ACTransect1)
 ```
 
-
 ```{r}
 #Calculate mean phenotype of maternal genotype separated by transect to account for environmental effects on each transect#
 Recipient1 <- c(ACTransect1$Recipient)
@@ -118,7 +121,6 @@ mean(ACTransect1Pop$Stem_Biomass, na.rm = FALSE)
 min(ACTransect1Pop$Stem_Biomass, na.rm = FALSE)
 max(ACTransect1Pop$Stem_Biomass, na.rm = FALSE)
 ```
-
 
 ```{r}
 Recipients <- c(ACTransect1$Recipient, ACTransect2$Recipient, ACTransect3$Recipient, ACTransect4$Recipient, ACTransect5$Recipient, ACTransect6$Recipient, ACTransect7$Recipient, ACTransect8$Recipient, ACTransect9$Recipient)
@@ -145,7 +147,7 @@ DonorMean <- ACTransect1PopDonor %>%
 var(DonorMean$Stem_Biomass, na.rm=TRUE)
 ```
 
-#Start on line 697 to begin mean centering stuff#
+
 ```{r}
 ACTransect1 <- ACTransect1 %>% mutate(Log_Stem_BiomassMC = center_scale(Log_Stem_Biomass))
 mean(ACTransect1$Log_Stem_BiomassMC, na.rm = TRUE)
@@ -173,7 +175,8 @@ DonorMeanLog <- ACTransect1PopDonorLog %>%
 #calculate genetic variance of stem biomass in paternal genotypes in Transect 1
 var(DonorMeanLog$Log_Stem_BiomassMC, na.rm=TRUE)
 ```
-#Look into mixed models. a <- lmer(StemBiomass ~ matid + patid) . thats the code you should be using to look at regression. Then to get variance of maternal id and paternal id in relation to stem biomass youll use the code : varcomp(a)#
+
+#Look into mixed models. a \<- lmer(StemBiomass \~ matid + patid) . thats the code you should be using to look at regression. Then to get variance of maternal id and paternal id in relation to stem biomass youll use the code : varcomp(a)\#
 
 ```{r}
 #Access AC code with Knitr package#
@@ -181,7 +184,20 @@ knitr::knit("~/MazerResearchProject/DataFromOtherCode.Rmd", output = NULL)
 
 var(AC_Avg_MC_Population_ByRecip$AMC_Log_Stem_Biomass, na.rm = TRUE)
 var(AC_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
+
+practice <- lmer(Log_Stem_Biomass_MC ~ 1 + 1|Donor:Recipient, AC_MeanCentered_AllTransects)
+summary(practice)
+ranef(practice)#values of the mean centered biomass. if positive its higher then mean of biomass#
+library(jtools)
+summ(practice)
+#summary lmer tells us stdev among recipients. j tools does the same. if the values is the same tis just more reassuring ICC in jtools tells us how similar they are to one another. higher the value, more similar recipients within donor. Being within the same donor, recipients are necessarily close to each other. If value is 1, then all the recipients are very similar#
+library(lmerTest) #tells us if significantly different or not
+ranova(practice)#runs model with/without random effect and tells us if running model with effect explains more variation in stembiomass then without effect# In this case the value (0.002239) is showing including the effect explains more then 0. Running ranova tells us whether each of the random effects(if more then one) is signifcantly more then 0. if value is less then .05 then it is significant.
+
+practice2 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Donor:Recipient), AC_MeanCentered_AllTransects)
+#FOR NEXT WEEK. ADD MY CODE TO BOTTOM OF THIS CODE AND MAKE SURE YOU HAVE PROPER DATA SETS SO THEY WORK(IDN TO DO THIS), RUN LMER MODELS).
 ```
+
 ```{r}
 #Access HR code with Knitr package#
 knitr::knit("~/MazerResearchProject/DataFromOtherCodeHR.Rmd", output = NULL)
