@@ -4,11 +4,32 @@ output: html_document
 date: "2023-11-21"
 ---
 
-```{r}
-install.packages("jtools")
-install.packages("lme4")
-install.packages("lmerTest")
 
+```r
+install.packages("jtools")
+```
+
+```
+## Error in install.packages : Updating loaded packages
+```
+
+```r
+install.packages("lme4")
+```
+
+```
+## Error in install.packages : Updating loaded packages
+```
+
+```r
+install.packages("lmerTest")
+```
+
+```
+## Error in install.packages : Updating loaded packages
+```
+
+```r
 library(Matrix)
 library(dplyr)
 library(ggplot2)
@@ -21,20 +42,86 @@ library(tidyverse)
 library(visreg)
 
 BB_Data_2022 <- read_csv("~/MazerResearchProject/Data/BB_Data_2022.csv")
+```
+
+```
+## Rows: 369 Columns: 23
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr  (6): Population, Generation, Donor, Recipient, FFD, LFD
+## dbl (16): Field_Year, Block, Location, Sequence, Plant_ID, Total_Closed_Fruits, Total_Fruits, Tot_Seed_Num_Clo...
+## lgl  (1): Left_Or_Right
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+```r
 view(BB_Data_2022)
 ```
 
-```{r}
+
+```r
 BB_Data_2022 <- BB_Data_2022 %>% mutate(FFD = yday(mdy(FFD)), LFD = yday(mdy(LFD)), Flowering_Duration = LFD-FFD) 
 
 BB_Data_2022$Flowering_Duration - BB_Data_2022$fl_duration
+```
 
+```
+##   [1]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+##  [37]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 NA  0  0  0  0  0  0  0  0
+##  [73]  0  0  0  0  0  0  0 NA  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [109]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 NA
+## [145]  0  0  0 NA NA  0  0  0  0  0  0  0  0  0 NA  0  0  0  0  0  0  0  0  0  0 NA  0  0  0  0  0  0  0  0  0  0
+## [181]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [217]  0  0  0 NA NA  0  0  0  0  0  0  0 NA  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 NA  0  0  0  0
+## [253]  0  0  0  0  0  0  0  0  0  0 NA NA  0  0  0  0 NA  0  0  0  0  0  0  0  0  0 NA  0  0  0  0  0  0  0  0  0
+## [289]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 NA  0  0  0  0  0  0  0  0  0  0  0  0  0 NA  0  0 NA  0  0  0
+## [325]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 NA  0  0  0
+## [361]  0  0  0  0  0  0  0  0  0
+```
+
+```r
 min(BB_Data_2022$Total_Fruits, na.rm=TRUE) 
-min(BB_Data_2022$Mean_Seeds_per_Fruit, na.rm=TRUE)
-min(BB_Data_2022$Lifetime_Fecundity, na.rm=TRUE)
-min(BB_Data_2022$Stem_Biomass, na.rm=TRUE)
-min(BB_Data_2022$Leaf_Area_mm2, na.rm=TRUE)
+```
 
+```
+## [1] 0
+```
+
+```r
+min(BB_Data_2022$Mean_Seeds_per_Fruit, na.rm=TRUE)
+```
+
+```
+## [1] 0
+```
+
+```r
+min(BB_Data_2022$Lifetime_Fecundity, na.rm=TRUE)
+```
+
+```
+## [1] 0
+```
+
+```r
+min(BB_Data_2022$Stem_Biomass, na.rm=TRUE)
+```
+
+```
+## [1] 1.93
+```
+
+```r
+min(BB_Data_2022$Leaf_Area_mm2, na.rm=TRUE)
+```
+
+```
+## [1] 9.523
+```
+
+```r
 BB_Data_2022 <- BB_Data_2022 %>% mutate(Log_Total_Fruits=log(Total_Fruits+1), Log_Mean_Seeds_per_Fruit=log(Mean_Seeds_per_Fruit+1), Log_Lifetime_Fecundity=log(Lifetime_Fecundity+1), Log_Stem_Biomass=log(Stem_Biomass), Log_Leaf_Area_mm2=log(Leaf_Area_mm2))
 
 BBBlock1 <- subset(BB_Data_2022, Block == 1)
@@ -42,7 +129,8 @@ BBBlock2 <- subset(BB_Data_2022, Block == 2)
 BBBlock3 <- subset(BB_Data_2022, Block == 3)
 ```
 
-```{r}
+
+```r
 PopulationV1 <- BBBlock1$Population 
 Field_YearV1 <- BBBlock1$Field_Year
 GenerationV1 <- BBBlock1$Generation
@@ -66,7 +154,13 @@ BBBlock1$LFD <- NULL
 z_scores <- as.data.frame(sapply(BBBlock1, function(BBBlock1) (abs(BBBlock1-mean(BBBlock1, na.rm = TRUE))/sd(BBBlock1, na.rm = TRUE))))
 
 class(z_scores)
+```
 
+```
+## [1] "data.frame"
+```
+
+```r
 View(z_scores)
 
 for(i in 1:nrow(z_scores)){
@@ -83,7 +177,18 @@ for(i in 1:nrow(z_scores)){
 BBBlock1 <- BBBlock1 %>% mutate(Population = PopulationV1 , Field_Year = Field_YearV1, Generation = GenerationV1, Block = BlockV1, Sequence = SequenceV1, Donor = DonorV1, Recipient = RecipientV1, FFD = FFDV1, LFD = LFDV1, .before = Left_Or_Right, )
 
 print(BBBlock1$Sequence)
+```
 
+```
+##   [1]   1   2   3   4   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28
+##  [28]  29  30  31  32  33  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56
+##  [55]  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83
+##  [82]  84  85  86  87  88  89  90  91  92  93  94  95  97  98  99 100 101 102 103 104 106 107 108 109 111 112 113
+## [109] 114 115 116 117 118 119 120 122 123 124 125 127 128 129 131 134 135 136 137 138 139 140 141 142 143 144 145
+## [136] 146 147
+```
+
+```r
 PopulationV2 <- BBBlock2$Population 
 Field_YearV2 <- BBBlock2$Field_Year
 GenerationV2 <- BBBlock2$Generation
@@ -107,7 +212,13 @@ BBBlock2$LFD <- NULL
 z_scores <- as.data.frame(sapply(BBBlock2, function(BBBlock2) (abs(BBBlock2-mean(BBBlock2, na.rm = TRUE))/sd(BBBlock2, na.rm = TRUE))))
 
 class(z_scores)
+```
 
+```
+## [1] "data.frame"
+```
+
+```r
 View(z_scores)
 
 for(i in 1:nrow(z_scores)){
@@ -124,7 +235,16 @@ for(i in 1:nrow(z_scores)){
 BBBlock2 <- BBBlock2 %>% mutate(Population = PopulationV2 , Field_Year = Field_YearV2, Generation = GenerationV2, Block = BlockV2, Sequence = SequenceV2, Donor = DonorV2, Recipient = RecipientV2, FFD = FFDV2, LFD = LFDV2, .before = Left_Or_Right, )
 
 print(BBBlock2$Sequence)
+```
 
+```
+##   [1] 148 151 152 153 154 155 156 157 158 159 161 162 163 164 166 167 168 170 173 174 178 181 183 185 186 187 188
+##  [28] 189 190 191 192 193 194 195 197 199 200 202 203 204 205 206 207 208 210 211 212 213 214 215 216 218 219 220
+##  [55] 223 224 225 226 227 228 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 253 254 255 257 260 262
+##  [82] 263 267 269 271 272 274 275 276 277 278 279 280 283 285 287 288 289 290 291 292 293 294
+```
+
+```r
 PopulationV3 <- BBBlock3$Population 
 Field_YearV3 <- BBBlock3$Field_Year
 GenerationV3 <- BBBlock3$Generation
@@ -148,7 +268,13 @@ BBBlock3$LFD <- NULL
 z_scores <- as.data.frame(sapply(BBBlock3, function(BBBlock3) (abs(BBBlock3-mean(BBBlock3, na.rm = TRUE))/sd(BBBlock3, na.rm = TRUE))))
 
 class(z_scores)
+```
 
+```
+## [1] "data.frame"
+```
+
+```r
 View(z_scores)
 
 for(i in 1:nrow(z_scores)){
@@ -165,12 +291,33 @@ for(i in 1:nrow(z_scores)){
 BBBlock3 <- BBBlock3 %>% mutate(Population = PopulationV3 , Field_Year = Field_YearV3, Generation = GenerationV3, Block = BlockV3, Sequence = SequenceV3, Donor = DonorV3, Recipient = RecipientV3, FFD = FFDV3, LFD = LFDV3, .before = Left_Or_Right, )
 
 print(BBBlock3$Sequence)
-
 ```
 
-```{r}
-names(BBBlock1)
+```
+##   [1] 295 296 300 302 303 304 305 306 307 308 309 310 311 313 314 315 316 317 318 320 321 323 324 325 326 327 328
+##  [28] 329 330 331 332 333 334 335 336 337 338 339 340 341 342 343 344 345 346 347 348 349 350 351 352 354 355 356
+##  [55] 357 358 359 360 361 362 363 364 365 366 367 368 369 371 372 373 374 375 376 377 379 380 381 382 383 384 385
+##  [82] 386 388 389 390 391 393 394 395 396 397 398 399 400 401 402 403 404 405 406 409 410 411 412 413 414 415 416
+## [109] 417 420 421 423 424 425 426 428 429 430 431 432 433 434 435 436 437 438 439 440 441
+```
 
+
+```r
+names(BBBlock1)
+```
+
+```
+##  [1] "Location"                 "Population"               "Field_Year"               "Generation"              
+##  [5] "Block"                    "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num_ClosedFt"    "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
+```
+
+```r
 BBBlock1 <- BBBlock1 %>% mutate(
   Total_Closed_Fruits_MC = center_scale(Total_Closed_Fruits),
   Log_Total_Fruits_MC = center_scale(Log_Total_Fruits),
@@ -214,10 +361,10 @@ View(BBBlock1)
   FFD_MC = center_scale(FFD),
   LFD_MC = center_scale(LFD),
   Flowering_Duration_MC = center_scale(Flowering_Duration))
-  
 ```
 
-```{r}
+
+```r
 Recipients <- c(BBBlock1$Recipient, BBBlock2$Recipient, BBBlock3$Recipient)
 Recipients <- unique(Recipients)
 

@@ -196,5 +196,7 @@ var(BO_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
 
 ```{r}
 #Access BB code with Knitr package#
-
+knitr::knit("~/MazerResearchProject/DataFromOtherCodeBB.Rmd", output = NULL)
+var(BB_Avg_MC_Population_ByRecip$AMC_Log_Stem_Biomass, na.rm = TRUE)
+var(BB_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
 ```
