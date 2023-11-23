@@ -179,12 +179,6 @@ var(DonorMeanLog$Log_Stem_BiomassMC, na.rm=TRUE)
 #Look into mixed models. a \<- lmer(StemBiomass \~ matid + patid) . thats the code you should be using to look at regression. Then to get variance of maternal id and paternal id in relation to stem biomass youll use the code : varcomp(a)\#
 
 ```{r}
-#Access AC code with Knitr package#
-knitr::knit("~/MazerResearchProject/DataFromOtherCode.Rmd", output = NULL)
-
-var(AC_Avg_MC_Population_ByRecip$AMC_Log_Stem_Biomass, na.rm = TRUE)
-var(AC_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
-
 practice <- lmer(Log_Stem_Biomass_MC ~ 1 + 1|Donor:Recipient, AC_MeanCentered_AllTransects)
 summary(practice)
 ranef(practice)#values of the mean centered biomass. if positive its higher then mean of biomass#
@@ -196,6 +190,12 @@ ranova(practice)#runs model with/without random effect and tells us if running m
 
 practice2 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Donor:Recipient), AC_MeanCentered_AllTransects)
 #FOR NEXT WEEK. ADD MY CODE TO BOTTOM OF THIS CODE AND MAKE SURE YOU HAVE PROPER DATA SETS SO THEY WORK(IDN TO DO THIS), RUN LMER MODELS).
+```
+```{r}
+#Access AC code with Knitr package#
+knitr::knit("~/MazerResearchProject/DataFromOtherCode.Rmd", output = NULL)
+var(AC_Avg_MC_Population_ByRecip$AMC_Log_Stem_Biomass, na.rm = TRUE)
+var(AC_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
 ```
 
 ```{r}
@@ -219,4 +219,35 @@ var(BO_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
 knitr::knit("~/MazerResearchProject/DataFromOtherCodeBB.Rmd", output = NULL)
 var(BB_Avg_MC_Population_ByRecip$AMC_Log_Stem_Biomass, na.rm = TRUE)
 var(BB_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
+```
+
+```{r}
+#AC Stem Biomass Lmer stuff#
+ACLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + 1|Donor:Recipient, AC_MeanCentered_AllTransects)
+summary(ACLmer)
+ranef(ACLmer)
+summ(ACLmer)
+ranova(ACLmer)
+
+#HR Stem Biomass Lmer Stuff#
+HRLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + 1|Donor:Recipient, HR_MeanCentered_AllTransects)
+summary(HRLmer)
+ranef(HRLmer)
+summ(HRLmer)
+ranova(HRLmer)
+
+#BO Stem Biomass Lmer Stuff#
+BOLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + 1 |Donor:Recipient, BO_MeanCentered_AllTransects)
+summary(BOLmer)
+ranef(BOLmer)
+summ(BOLmer)
+ranova(BOlmer)
+
+#BB Stem Biomass Lmer Stuff#
+BBLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + 1 |Donor:Recipient, BB_MeanCentered_AllTransects)
+summary(BBLmer)
+ranef(BBLmer)
+summ(BBLmer)
+ranova(BBLmer)
+
 ```
