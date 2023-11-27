@@ -21,10 +21,10 @@ BO_Data_2022 <- read_csv("~/MazerResearchProject/Data/BO_Data_2022.csv")
 
 ```
 ## Rows: 349 Columns: 23
-## ── Column specification ────────────────────────────────────────────────────────────────────────
+## ── Column specification ─────────────────────────────────────────────────────────────────────────
 ## Delimiter: ","
 ## chr  (6): Population, Generation, Donor, Recipient, FFD, LFD
-## dbl (16): Field_Year, Block, Transect, Sequence, Plant_ID, Total_Closed_Fruits, Total_Fruits...
+## dbl (16): Field_Year, Block, Transect, Sequence, Plant_ID, Total_Closed_Fruits, Total_Fruits,...
 ## lgl  (1): Left_Or_Right
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
@@ -178,8 +178,8 @@ print(BOTransect1$Sequence)
 ```
 
 ```
-##  [1]  1  2  3  4  5  6  7  9 10 11 12 13 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33
-## [31] 34 35 37 38 40 42 44
+##  [1]  1  2  3  4  5  6  7  9 10 11 12 13 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34
+## [32] 35 37 38 40 42 44
 ```
 
 ```r
@@ -1561,7 +1561,7 @@ str(Donors)
 ```
 
 ```
-##  chr [1:44] "BO_201" "BO_192" "BO_005" "BO_070" "BO_038" "BO_170" "BO_001" "BO_033" ...
+##  chr [1:44] "BO_201" "BO_192" "BO_005" "BO_070" "BO_038" "BO_170" "BO_001" "BO_033" "BO_065" ...
 ```
 
 ```r
