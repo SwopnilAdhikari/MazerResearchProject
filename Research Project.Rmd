@@ -14,6 +14,14 @@ library(lubridate)
 library(knitr)
 library(Matrix)
 library(lme4)
+#install.packages("effects")
+#install.packages("dotwhisker")
+#install.packages("merDeriv")
+#install.packages("vioplot")
+library(vioplot)
+library(dotwhisker)
+library(effects)
+library(merDeriv)
 
 ```
 
@@ -55,8 +63,6 @@ var(HR_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
 knitr::knit("~/MazerResearchProject/DataFromOtherCodeBO.Rmd", output = NULL)
 var(BO_Avg_MC_Population_ByRecip$AMC_Log_Stem_Biomass, na.rm = TRUE)
 var(BO_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
-
-
 ```
 
 ```{r}
@@ -73,6 +79,7 @@ summary(ACLmer)
 ranef(ACLmer)
 summ(ACLmer)
 ranova(ACLmer)
+VarCorr(ACLmer)
 
 ACLmer2 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Donor:Recipient), AC_MeanCentered_AllTransects)
 summary(ACLmer2)
@@ -93,9 +100,13 @@ ranef(HRLmer2)
 summ(HRLmer2)
 ranova(HRLmer2)
 
+by(HR_MeanCentered_AllTransects$Log_Stem_Biomass_MC, HR_MeanCentered_AllTransects$Donor, summary)
+boxplot(Log_Stem_Biomass_MC ~ Donor, data = HR_MeanCentered_AllTransects)
+
+
 
 #BO Stem Biomass Lmer Stuff#
-BOLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + 1 |Donor:Recipient, BO_MeanCentered_AllTransects)
+BOLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor:Recipient), BO_MeanCentered_AllTransects)
 summary(BOLmer)
 ranef(BOLmer)
 summ(BOLmer)
@@ -105,16 +116,26 @@ BOLmer2 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Donor:Recipient), BO_Me
 summary(BOLmer2)
 summ(BOLmer2)
 ranova(BOLmer2)
+dwplot(BOLmer, random = TRUE)
 
 #BB Stem Biomass Lmer Stuff#
-BBLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + 1 |Donor:Recipient, BB_MeanCentered_AllTransects)
+BBLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + (1 |Donor:Recipient), BB_MeanCentered_AllBlocks)
 summary(BBLmer)
 ranef(BBLmer)
 summ(BBLmer)
 ranova(BBLmer)
+View(BB_MeanCentered_AllBlocks)
 
 BBLmer2 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Donor:Recipient), BB_MeanCentered_AllBlocks)
 summary(BBLmer2)
 summ(BBLmer2)
 ranova(BBLmer2)
+
+BBLmer3 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Recipient) + (1|Donor:Recipient), BB_MeanCentered_AllBlocks)
+summary(BBLmer3)
+
+BBLmer4 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Recipient), BB_MeanCentered_AllBlocks)
+summary(BBLmer4)
+
+help('isSingular')
 ```

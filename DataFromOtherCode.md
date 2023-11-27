@@ -18,30 +18,6 @@ library(jtools)
 ```r
 library(lme4)
 library(lmerTest)
-```
-
-```
-## Warning: package 'lmerTest' was built under R version 4.2.3
-```
-
-```
-## 
-## Attaching package: 'lmerTest'
-```
-
-```
-## The following object is masked from 'package:lme4':
-## 
-##     lmer
-```
-
-```
-## The following object is masked from 'package:stats':
-## 
-##     step
-```
-
-```r
 library(lubridate)
 library(readr)
 library(tidyverse)
@@ -52,13 +28,10 @@ AC_Data_2022 <- read_csv("~/MazerResearchProject/Data/AC_Data_2022.csv")
 
 ```
 ## Rows: 319 Columns: 23
-```
-
-```
-## ── Column specification ─────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────────────────────
 ## Delimiter: ","
 ## chr  (6): Population, Generation, Donor, Recipient, FFD, LFD
-## dbl (16): Field_Year, Block, Transect, Sequence, Plant_ID, Total_Closed_Fruits, Total_Fruits,...
+## dbl (16): Field_Year, Block, Transect, Sequence, Plant_ID, Total_Closed_Fruits, Total_Fruits...
 ## lgl  (1): Left_Or_Right
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
@@ -209,8 +182,8 @@ print(ACTransect1$Sequence)
 ```
 
 ```
-##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
-## [32] 32 33 34 35 36
+##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30
+## [31] 31 32 33 34 35 36
 ```
 
 ```r
@@ -1331,7 +1304,7 @@ str(Donors)
 ```
 
 ```
-##  chr [1:40] "AC_150" "AC_102" "AC_177" "AC_094" "AC_186" "AC_015" "AC_096" "AC_107" "AC_207" ...
+##  chr [1:40] "AC_150" "AC_102" "AC_177" "AC_094" "AC_186" "AC_015" "AC_096" "AC_107" ...
 ```
 
 ```r
