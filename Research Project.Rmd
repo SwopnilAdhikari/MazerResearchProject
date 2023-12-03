@@ -115,6 +115,7 @@ ranova(HRLmer2)
 by(HR_MeanCentered_AllTransects$Log_Stem_Biomass_MC, HR_MeanCentered_AllTransects$Donor, summary)
 boxplot(Log_Stem_Biomass_MC ~ Donor, data = HR_MeanCentered_AllTransects)
 
+#h2 = 0 (variance is all environmental???)
 ```
 
 ```{r}
