@@ -36,6 +36,7 @@ library(lmerTest) #tells us if significantly different or not
 ranova(practice)#runs model with/without random effect and tells us if running model with effect explains more variation in stembiomass then without effect# In this case the value (0.002239) is showing including the effect explains more then 0. Running ranova tells us whether each of the random effects(if more then one) is signifcantly more then 0. if value is less then .05 then it is significant.
 
 practice2 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Donor:Recipient), AC_MeanCentered_AllTransects)
+practice2
 #FOR NEXT WEEK. ADD MY CODE TO BOTTOM OF THIS CODE AND MAKE SURE YOU HAVE PROPER DATA SETS SO THEY WORK(IDN TO DO THIS), RUN LMER MODELS).
 ```
 ```{r}
