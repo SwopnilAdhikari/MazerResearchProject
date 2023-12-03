@@ -88,6 +88,17 @@ ranef(ACLmer2)
 summ(ACLmer2)
 ranova(ACLmer2)
 
+#Calculate the h2#
+#var for donors controlling for recipients nested within donors = 0.06693
+var(AC_MeanCentered_AllTransects$Log_Stem_Biomass_MC, na.rm = TRUE)
+
+4 * 0.06693
+0.26772/1.099749
+
+#h2 = 0.2434 (without controlling for other traits)  
+```
+
+```{r}
 #HR Stem Biomass Lmer Stuff#
 HRLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + 1|Donor:Recipient, HR_MeanCentered_AllTransects)
 summary(HRLmer)
@@ -104,8 +115,9 @@ ranova(HRLmer2)
 by(HR_MeanCentered_AllTransects$Log_Stem_Biomass_MC, HR_MeanCentered_AllTransects$Donor, summary)
 boxplot(Log_Stem_Biomass_MC ~ Donor, data = HR_MeanCentered_AllTransects)
 
+```
 
-
+```{r}
 #BO Stem Biomass Lmer Stuff#
 BOLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor:Recipient), BO_MeanCentered_AllTransects)
 summary(BOLmer)
@@ -119,6 +131,15 @@ summ(BOLmer2)
 ranova(BOLmer2)
 dwplot(BOLmer, random = TRUE)
 
+var(BO_MeanCentered_AllTransects$Log_Stem_Biomass_MC, na.rm = TRUE)
+
+4*2.100e-01
+0.84/0.97
+
+#h2 value = 0.86 (without factoring effect of other traits)
+```
+
+```{r}
 #BB Stem Biomass Lmer Stuff#
 BBLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + (1 |Donor:Recipient), BB_MeanCentered_AllBlocks)
 summary(BBLmer)
@@ -132,11 +153,7 @@ summary(BBLmer2)
 summ(BBLmer2)
 ranova(BBLmer2)
 
-BBLmer3 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Recipient) + (1|Donor:Recipient), BB_MeanCentered_AllBlocks)
-summary(BBLmer3)
-
-BBLmer4 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Recipient), BB_MeanCentered_AllBlocks)
-summary(BBLmer4)
-
-help('isSingular')
+4 * 0.03166
+0.12/(var(BB_MeanCentered_AllBlocks$Log_Stem_Biomass_MC, na.rm = TRUE))
+#h2 = 0.162
 ```
