@@ -17,6 +17,7 @@ library(tidyverse)
 library(visreg)
 
 BO_Data_2022 <- read_csv("~/MazerResearchProject/Data/BO_Data_2022.csv")
+view(BO_Data_2022)
 ```
 
 ```{r}

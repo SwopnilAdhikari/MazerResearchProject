@@ -14,9 +14,14 @@ library(lubridate)
 library(knitr)
 library(Matrix)
 library(lme4)
-print(sessionInfo())
-remotes::install_github("rileytwo/darkstudio")
-darkstudio::activate()
+#install.packages("effects")
+#install.packages("dotwhisker")
+#install.packages("merDeriv")
+#install.packages("vioplot")
+library(vioplot)
+library(dotwhisker)
+library(effects)
+library(merDeriv)
 
 ```
 
@@ -39,6 +44,7 @@ practice2 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Donor:Recipient), AC_
 practice2
 #FOR NEXT WEEK. ADD MY CODE TO BOTTOM OF THIS CODE AND MAKE SURE YOU HAVE PROPER DATA SETS SO THEY WORK(IDN TO DO THIS), RUN LMER MODELS).
 ```
+
 ```{r}
 #Access AC code with Knitr package#
 knitr::knit("~/MazerResearchProject/DataFromOtherCode.Rmd", output = NULL)
@@ -58,8 +64,6 @@ var(HR_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
 knitr::knit("~/MazerResearchProject/DataFromOtherCodeBO.Rmd", output = NULL)
 var(BO_Avg_MC_Population_ByRecip$AMC_Log_Stem_Biomass, na.rm = TRUE)
 var(BO_Avg_MC_Population_ByDonor$AMC_Log_Stem_Biomass, na.rm = TRUE)
-
-
 ```
 
 ```{r}
@@ -76,6 +80,13 @@ summary(ACLmer)
 ranef(ACLmer)
 summ(ACLmer)
 ranova(ACLmer)
+VarCorr(ACLmer)
+
+ACLmer2 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Donor:Recipient), AC_MeanCentered_AllTransects)
+summary(ACLmer2)
+ranef(ACLmer2)
+summ(ACLmer2)
+ranova(ACLmer2)
 
 #HR Stem Biomass Lmer Stuff#
 HRLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + 1|Donor:Recipient, HR_MeanCentered_AllTransects)
@@ -84,18 +95,48 @@ ranef(HRLmer)
 summ(HRLmer)
 ranova(HRLmer)
 
+HRLmer2 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Donor:Recipient), HR_MeanCentered_AllTransects)
+summary(HRLmer2)
+ranef(HRLmer2)
+summ(HRLmer2)
+ranova(HRLmer2)
+
+by(HR_MeanCentered_AllTransects$Log_Stem_Biomass_MC, HR_MeanCentered_AllTransects$Donor, summary)
+boxplot(Log_Stem_Biomass_MC ~ Donor, data = HR_MeanCentered_AllTransects)
+
+
+
 #BO Stem Biomass Lmer Stuff#
-BOLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + 1 |Donor:Recipient, BO_MeanCentered_AllTransects)
+BOLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor:Recipient), BO_MeanCentered_AllTransects)
 summary(BOLmer)
 ranef(BOLmer)
 summ(BOLmer)
 ranova(BOlmer)
 
+BOLmer2 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Donor:Recipient), BO_MeanCentered_AllTransects)
+summary(BOLmer2)
+summ(BOLmer2)
+ranova(BOLmer2)
+dwplot(BOLmer, random = TRUE)
+
 #BB Stem Biomass Lmer Stuff#
-BBLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + 1 |Donor:Recipient, BB_MeanCentered_AllTransects)
+BBLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + (1 |Donor:Recipient), BB_MeanCentered_AllBlocks)
 summary(BBLmer)
 ranef(BBLmer)
 summ(BBLmer)
 ranova(BBLmer)
+View(BB_MeanCentered_AllBlocks)
 
+BBLmer2 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Donor:Recipient), BB_MeanCentered_AllBlocks)
+summary(BBLmer2)
+summ(BBLmer2)
+ranova(BBLmer2)
+
+BBLmer3 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Recipient) + (1|Donor:Recipient), BB_MeanCentered_AllBlocks)
+summary(BBLmer3)
+
+BBLmer4 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Recipient), BB_MeanCentered_AllBlocks)
+summary(BBLmer4)
+
+help('isSingular')
 ```
