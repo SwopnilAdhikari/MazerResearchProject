@@ -100,13 +100,16 @@ var(AC_MeanCentered_AllTransects$Log_Stem_Biomass_MC, na.rm = TRUE)
 
 ```{r}
 #HR Stem Biomass Lmer Stuff#
+non_na_count <- sum(!is.na(HR_MeanCentered_AllTransects$Log_Stem_Biomass_MC))
+non_na_count
+
 HRLmer <- lmer(Log_Stem_Biomass_MC ~ 1 + 1|Donor:Recipient, HR_MeanCentered_AllTransects)
 summary(HRLmer)
 ranef(HRLmer)
 summ(HRLmer)
 ranova(HRLmer)
 
-HRLmer2 <- lmer(Log_Stem_Biomass_MC ~ Corolla_Diameter_MC + (1|Donor) + (1|Donor:Recipient), HR_MeanCentered_AllTransects)
+HRLmer2 <- lmer(Log_Stem_Biomass_MC ~ 1 + (1|Donor) + (1|Donor:Recipient), HR_MeanCentered_AllTransects)
 summary(HRLmer2)
 ranef(HRLmer2)
 summ(HRLmer2)
