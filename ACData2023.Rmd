@@ -1,0 +1,36 @@
+---
+title: "ACData2023"
+output: html_document
+date: "2024-01-29"
+---
+```{r}
+
+library(Matrix)
+library(dplyr)
+library(ggplot2)
+library(jtools)
+library(lme4)
+library(lmerTest)
+library(lubridate)
+library(readr)
+library(tidyverse)
+library(visreg)
+
+AC_Data_2023 <- read_csv("~/MazerResearchProject/Data/AC_Data_2023.csv")
+```
+```{r}
+AC23Transect1 <- subset(AC_Data_2023, Transect == 1)
+AC23Transect2 <- subset(AC_Data_2023, Transect == 2)
+AC23Transect3 <- subset(AC_Data_2023, Transect == 3)
+AC23Transect4 <- subset(AC_Data_2023, Transect == 4)
+AC23Transect5 <- subset(AC_Data_2023, Transect == 5)
+AC23Transect6 <- subset(AC_Data_2023, Transect == 6)
+AC23Transect7 <- subset(AC_Data_2023, Transect == 7)
+AC23Transect8 <- subset(AC_Data_2023, Transect == 8)
+AC23Transect9 <- subset(AC_Data_2023, Transect == 9)
+
+center_scale <- function(x) {
+  scale(x, scale = FALSE)
+}
+```
+

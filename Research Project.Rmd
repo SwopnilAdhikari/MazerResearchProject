@@ -96,6 +96,8 @@ var(AC_MeanCentered_AllTransects$Log_Stem_Biomass_MC, na.rm = TRUE)
 0.26772/1.099749
 
 #h2 = 0.2434 (without controlling for other traits)  
+by(AC_MeanCentered_AllTransects$Log_Stem_Biomass_MC, AC_MeanCentered_AllTransects$Donor, summary)
+boxplot(Log_Stem_Biomass_MC ~ Donor, data = AC_MeanCentered_AllTransects)
 ```
 
 ```{r}
@@ -141,6 +143,9 @@ var(BO_MeanCentered_AllTransects$Log_Stem_Biomass_MC, na.rm = TRUE)
 0.84/0.97
 
 #h2 value = 0.86 (without factoring effect of other traits)
+
+by(BO_MeanCentered_AllTransects$Log_Stem_Biomass_MC, BO_MeanCentered_AllTransects$Donor, summary)
+boxplot(Log_Stem_Biomass_MC ~ Donor, data = BO_MeanCentered_AllTransects)
 ```
 
 ```{r}
@@ -160,4 +165,7 @@ ranova(BBLmer2)
 4 * 0.03166
 0.12/(var(BB_MeanCentered_AllBlocks$Log_Stem_Biomass_MC, na.rm = TRUE))
 #h2 = 0.162
+
+by(BB_MeanCentered_AllBlocks$Log_Stem_Biomass_MC, BB_MeanCentered_AllBlocks$Donor, summary)
+boxplot(Log_Stem_Biomass_MC ~ Donor, data = BB_MeanCentered_AllBlocks)
 ```

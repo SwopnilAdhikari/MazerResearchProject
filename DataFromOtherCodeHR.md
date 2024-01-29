@@ -21,10 +21,10 @@ HR_Data_2022 <- read_csv("~/MazerResearchProject/Data/HR_Data_2022.csv")
 
 ```
 ## Rows: 406 Columns: 23
-## ── Column specification ────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## Delimiter: ","
 ## chr  (6): Population, Generation, Donor, Recipient, FFD, LFD
-## dbl (16): Field_Year, Block, Transect, Sequence, Plant_ID, Total_Closed_Fruits, Total_Fruits...
+## dbl (16): Field_Year, Block, Transect, Sequence, Plant_ID, Total_Closed_Fruits, Total_Fruits, Tot_Seed_Num(ClosedFt), Mean_Ind_Seed_...
 ## lgl  (1): Left_Or_Right
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
@@ -39,16 +39,13 @@ HR_Data_2022$Flowering_Duration - HR_Data_2022$fl_duration
 ```
 
 ```
-##   [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-##  [46] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-##  [91] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [136] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [181] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [226] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [271] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [316] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [361] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-## [406] 0
+##   [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+##  [66] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## [131] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## [196] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## [261] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## [326] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## [391] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 ```
 
 ```r
@@ -174,8 +171,7 @@ print(HRTransect1$Sequence)
 ```
 
 ```
-##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 28 29 30 31 32
-## [31] 33 34 35 36 37 38 39 40 41 42 43 44 45 46
+##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46
 ```
 
 ```r
@@ -270,16 +266,14 @@ names(HRTransect3)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -327,16 +321,14 @@ names(HRTransect4)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -384,16 +376,14 @@ names(HRTransect5)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -442,16 +432,14 @@ names(HRTransect6)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -499,16 +487,14 @@ names(HRTransect7)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -558,16 +544,14 @@ names(HRTransect8)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -617,16 +601,14 @@ names(HRTransect9)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 
@@ -637,16 +619,14 @@ names(HRTransect1)
 ```
 
 ```
-##  [1] "Population"               "Field_Year"               "Generation"              
-##  [4] "Block"                    "Transect"                 "Sequence"                
-##  [7] "Donor"                    "Recipient"                "FFD"                     
-## [10] "LFD"                      "Left_Or_Right"            "Plant_ID"                
-## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"  
-## [16] "Mean_Ind_Seed_Mass_mg"    "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"      
-## [19] "Stem_Biomass"             "Corolla_Diameter"         "Corolla_Area"            
-## [22] "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
-## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"  
-## [28] "Log_Stem_Biomass"         "Log_Leaf_Area_mm2"
+##  [1] "Population"               "Field_Year"               "Generation"               "Block"                   
+##  [5] "Transect"                 "Sequence"                 "Donor"                    "Recipient"               
+##  [9] "FFD"                      "LFD"                      "Left_Or_Right"            "Plant_ID"                
+## [13] "Total_Closed_Fruits"      "Total_Fruits"             "Tot_Seed_Num(ClosedFt)"   "Mean_Ind_Seed_Mass_mg"   
+## [17] "Mean_Seeds_per_Fruit"     "Lifetime_Fecundity"       "Stem_Biomass"             "Corolla_Diameter"        
+## [21] "Corolla_Area"             "Leaf_Area_mm2"            "fl_duration"              "Flowering_Duration"      
+## [25] "Log_Total_Fruits"         "Log_Mean_Seeds_per_Fruit" "Log_Lifetime_Fecundity"   "Log_Stem_Biomass"        
+## [29] "Log_Leaf_Area_mm2"
 ```
 
 ```r
@@ -1244,7 +1224,7 @@ str(Recipients)
 ```
 
 ```
-##  chr [1:137] "HR_058" "HR_183" "HR_176" "HR_146" "HR_177" "HR_115" "HR_036" "HR_033" ...
+##  chr [1:137] "HR_058" "HR_183" "HR_176" "HR_146" "HR_177" "HR_115" "HR_036" "HR_033" "HR_061" "HR_158" "HR_175" "HR_005" "HR_057" ...
 ```
 
 ```r
@@ -1296,7 +1276,7 @@ str(Donors)
 ```
 
 ```
-##  chr [1:46] "HR_008" "HR_196" "HR_085" "HR_006" "HR_108" "HR_074" "HR_180" "HR_160" ...
+##  chr [1:46] "HR_008" "HR_196" "HR_085" "HR_006" "HR_108" "HR_074" "HR_180" "HR_160" "HR_070" "HR_133" "HR_164" "HR_171" "HR_148" ...
 ```
 
 ```r
