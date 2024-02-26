@@ -19,6 +19,18 @@ library(visreg)
 AC_Data_2023 <- read_csv("~/MazerResearchProject/Data/AC_Data_2023.csv")
 ```
 ```{r}
+AC_Data_2023 <- AC_Data_2023 %>% mutate(FFD = yday(ymd(FFD)), LFD = yday(ymd(LFD)), Flowering_Duration = LFD-FFD) 
+
+AC_Data_2023$Flowering_Duration - AC_Data_2023$fl_duration
+
+min(AC_Data_2023$Total_fruits_F, na.rm=TRUE) 
+min(AC_Data_2023$Mean_Seeds_per_Fruit, na.rm=TRUE)
+min(AC_Data_2023$Estimated_Fecundity, na.rm=TRUE)
+min(AC_Data_2023$skel_weight_mg, na.rm=TRUE)
+min(AC_Data_2023$Leaf_area_mm2, na.rm=TRUE)
+
+AC_Data_2023 <- AC_Data_2023 %>% mutate(Log_Total_Fruits=log(Total_fruits_F+1), Log_Mean_Seeds_per_Fruit=log(Mean_Seeds_per_Fruit+1), Log_Estimated_Fecundity=log(Estimated_Fecundity+1), Log_Stem_Biomass=log(skel_weight_mg), Log_Leaf_Area_mm2=log(Leaf_area_mm2))
+
 AC23Transect1 <- subset(AC_Data_2023, Transect == 1)
 AC23Transect2 <- subset(AC_Data_2023, Transect == 2)
 AC23Transect3 <- subset(AC_Data_2023, Transect == 3)
@@ -32,5 +44,46 @@ AC23Transect9 <- subset(AC_Data_2023, Transect == 9)
 center_scale <- function(x) {
   scale(x, scale = FALSE)
 }
+
+
+Donor23V1 <- AC23Transect1$Donor
+Recipient23V1 <- AC23Transect1$Recipient
+Transect23V1 <- AC23Transect1$Transect
+Generation23V1 <- AC23Transect1$Gen
+Isotope_Sample_ID23V1 <- AC23Transect1$Isotope_Sample_ID # Creates a vector of Population as charACter variables
+Sequence23V1 <- AC23Transect1$Sequence
+FFD23V1 <- AC23Transect1$FFD
+LFD23V1 <- AC23Transect1$LFD
+
+
+AC23Transect1$Donor <- NULL
+AC23Transect1$Recipient <- NULL
+AC23Transect1$Transect <- NULL
+AC23Transect1$Gen <-NULL
+AC23Transect1$Isotope_Sample_ID <- NULL
+AC23Transect1$Sequence <- NULL
+AC23Transect1$FFD <-NULL
+AC23Transect1$LFD <- NULL
+AC23Transect1$Sow_Date <- NULL
+AC23Transect1$Plant_Date <- NULL
+AC23Transect1$Segment <- NULL
+AC23Transect1$F_plant <- NULL
+AC23Transect1$FLR_P <- NULL
+
+z_scores <- as.data.frame(sapply(AC23Transect1, function(AC23Transect1) (abs(AC23Transect1-mean(AC23Transect1, na.rm = TRUE))/sd(AC23Transect1, na.rm = TRUE))))
+
+for(i in 1:nrow(z_scores)){
+  for(j in 1:ncol(z_scores)){
+    if(is.na(z_scores[i,j])){
+      AC23Transect1[i,j] = NA
+    }
+      else if(z_scores[i,j] > 3){
+      AC23Transect1[i,j] = NA
+      }
+    }
+  }
+
 ```
+
+
 
