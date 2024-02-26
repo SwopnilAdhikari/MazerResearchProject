@@ -88,6 +88,7 @@ ranef(ACLmer2)
 summ(ACLmer2)
 ranova(ACLmer2)
 
+ss
 #Calculate the h2#
 #var for donors controlling for recipients nested within donors = 0.06693
 var(AC_MeanCentered_AllTransects$Log_Stem_Biomass_MC, na.rm = TRUE)
